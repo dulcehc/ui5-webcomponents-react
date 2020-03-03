@@ -1,15 +1,13 @@
 import { action } from '@storybook/addon-actions';
 import { boolean, select } from '@storybook/addon-knobs';
-import React from 'react';
 import { CalendarType } from '@ui5/webcomponents-react/lib/CalendarType';
 import { DatePicker } from '@ui5/webcomponents-react/lib/DatePicker';
 import { ValueState } from '@ui5/webcomponents-react/lib/ValueState';
-import notes from './DatePicker.md';
+import React from 'react';
 
 export default {
-  title: 'UI5 Web Components | DatePicker',
-  component: DatePicker,
-  parameters: { notes }
+  title: 'UI5 Web Components / DatePicker',
+  component: DatePicker
 };
 
 export const generatedDefaultStory = () => (

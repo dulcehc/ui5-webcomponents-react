@@ -1,7 +1,6 @@
-import React from 'react';
 import { Bar } from '@ui5/webcomponents-react/lib/Bar';
 import { Label } from '@ui5/webcomponents-react/lib/Label';
-import notes from './Bar.md';
+import React from 'react';
 
 export const defaultStory = () => {
   return (
@@ -17,7 +16,6 @@ defaultStory.story = {
 };
 
 export default {
-  title: 'Components | Bar',
-  component: Bar,
-  parameters: { notes }
+  title: 'Components / Bar',
+  component: Bar
 };

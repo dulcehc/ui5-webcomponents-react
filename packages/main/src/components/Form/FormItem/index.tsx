@@ -1,9 +1,9 @@
-import React, { FC, forwardRef, Ref, ReactNode, ReactNodeArray, useMemo, useContext } from 'react';
 import { Label } from '@ui5/webcomponents-react/lib/Label';
-import { styles } from '../Form.jss';
+import React, { FC, forwardRef, ReactNode, ReactNodeArray, Ref, useContext, useMemo } from 'react';
 import { createUseStyles } from 'react-jss';
 import { CurrentRange } from '../CurrentViewportRangeContext';
-import { JSSTheme } from '../../../interfaces/JSSTheme';
+import { styles } from '../Form.jss';
+
 
 export interface FormItemProps {
   labelText?: string;
@@ -15,8 +15,11 @@ const calculateWidth = (rate) => {
   return Math.floor((100 / 12) * rate) + '%';
 };
 
-const useStyles = createUseStyles<JSSTheme, keyof ReturnType<typeof styles>>(styles, { name: 'FormItem' });
+const useStyles = createUseStyles<keyof ReturnType<typeof styles>>(styles, { name: 'FormItem' });
 
+/**
+ * <code>import { FormItem } from '@ui5/webcomponents-react/lib/FormItem';</code>
+ */
 const FormItem: FC<FormItemProps> = forwardRef((props: FormItemProps, ref: Ref<HTMLDivElement>) => {
   const { labelText, children } = props;
 

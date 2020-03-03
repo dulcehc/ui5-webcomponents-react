@@ -1,7 +1,11 @@
+import { action } from '@storybook/addon-actions';
 import { Grid } from '@ui5/webcomponents-react/lib/Grid';
 import React from 'react';
+<<<<<<< HEAD
 import notes from './Grid.md';
 import { action } from '@storybook/addon-actions';
+=======
+>>>>>>> 2211d4aee03ccf84da5f45fdbc5dd42073e85d0e
 
 export const defaultStory = () => {
   return (
@@ -17,7 +21,6 @@ export const defaultStory = () => {
 };
 
 export default {
-  title: 'Components | Grid',
-  component: Grid,
-  parameters: { notes }
+  title: 'Components / Grid',
+  component: Grid
 };

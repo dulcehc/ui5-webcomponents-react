@@ -1,17 +1,18 @@
 import { action } from '@storybook/addon-actions';
 import { boolean, select, text } from '@storybook/addon-knobs';
 import { LineChart } from '@ui5/webcomponents-react-charts/lib/LineChart';
-import React from 'react';
 import { AnalyticalCard } from '@ui5/webcomponents-react/lib/AnalyticalCard';
 import { AnalyticalCardHeader } from '@ui5/webcomponents-react/lib/AnalyticalCardHeader';
 import { DeviationIndicator } from '@ui5/webcomponents-react/lib/DeviationIndicator';
 import { ValueState } from '@ui5/webcomponents-react/lib/ValueState';
-import notes from './AnalyticalCard.md';
+import React from 'react';
 
 export default {
-  title: 'Components | Analytical Card',
+  title: 'Components / Analytical Card',
   component: AnalyticalCard,
-  parameters: { notes }
+  parameters: {
+    subcomponents: { AnalyticalCardHeader }
+  }
 };
 
 export const defaultStory = () => (

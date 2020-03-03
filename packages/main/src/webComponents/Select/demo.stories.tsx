@@ -1,15 +1,16 @@
 import { action } from '@storybook/addon-actions';
 import { boolean, select } from '@storybook/addon-knobs';
-import React from 'react';
+import { Option } from '@ui5/webcomponents-react/lib/Option';
 import { Select } from '@ui5/webcomponents-react/lib/Select';
 import { ValueState } from '@ui5/webcomponents-react/lib/ValueState';
-import { Option } from '@ui5/webcomponents-react/lib/Option';
-import notes from './Select.md';
+import React from 'react';
 
 export default {
-  title: 'UI5 Web Components | Select',
+  title: 'UI5 Web Components / Select',
   component: Select,
-  parameters: { notes }
+  parameters: {
+    subcomponents: { Option }
+  }
 };
 
 export const generatedDefaultStory = () => (

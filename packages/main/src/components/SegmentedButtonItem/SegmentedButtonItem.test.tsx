@@ -1,8 +1,8 @@
-import { getEventFromCallback, mountThemedComponent } from '@shared/tests/utils';
-import React from 'react';
-import sinon from 'sinon';
+import { createPassThroughPropsTest, getEventFromCallback, mountThemedComponent } from '@shared/tests/utils';
 import { Icon } from '@ui5/webcomponents-react/lib/Icon';
 import { SegmentedButtonItem } from '@ui5/webcomponents-react/lib/SegmentedButtonItem';
+import React from 'react';
+import sinon from 'sinon';
 
 describe('SegmentedButtonItem', () => {
   test('Basic SegmentedButtonItem', () => {
@@ -46,4 +46,6 @@ describe('SegmentedButtonItem', () => {
     expect(wrapper.render()).toMatchSnapshot();
     expect(getEventFromCallback(callback).getParameter('selectedKey')).toEqual(1);
   });
+
+  createPassThroughPropsTest(SegmentedButtonItem);
 });

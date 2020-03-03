@@ -3,7 +3,6 @@ import { Breadcrumbs } from '@ui5/webcomponents-react/lib/Breadcrumbs';
 import { BreadcrumbsSeparatorStyle } from '@ui5/webcomponents-react/lib/BreadcrumbsSeparatorStyle';
 import { Link } from '@ui5/webcomponents-react/lib/Link';
 import React from 'react';
-import notes from './Breadcrumbs.md';
 
 export const defaultStory = () => {
   return (
@@ -36,7 +35,9 @@ withCurrentLocation.story = {
 };
 
 export default {
-  title: 'Components | Breadcrumbs',
+  title: 'Components / Breadcrumbs',
   component: Breadcrumbs,
-  parameters: { notes }
+  parameters: {
+    subcomponents: { Link }
+  }
 };

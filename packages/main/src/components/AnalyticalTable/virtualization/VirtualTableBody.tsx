@@ -1,5 +1,6 @@
 import '@ui5/webcomponents-icons/dist/icons/navigation-down-arrow';
 import '@ui5/webcomponents-icons/dist/icons/navigation-right-arrow';
+import { TableSelectionMode } from '@ui5/webcomponents-react/lib/TableSelectionMode';
 import React, { useCallback, useEffect, useMemo, useRef } from 'react';
 import { FixedSizeList } from 'react-window';
 import { VirtualTableRow } from './VirtualTableRow';
@@ -11,9 +12,7 @@ export const VirtualTableBody = (props) => {
     rows,
     minRows,
     columns,
-    selectedRow,
-    selectedRowPath,
-    selectable,
+    selectionMode,
     reactWindowRef,
     isTreeTable,
     internalRowHeight,
@@ -21,20 +20,32 @@ export const VirtualTableBody = (props) => {
     visibleRows,
     alternateRowColor,
     overscanCount,
-    totalColumnsWidth
+    totalColumnsWidth,
+    selectedFlatRows
   } = props;
 
   const innerDivRef = useRef(null);
 
   useEffect(() => {
+    selectionMode;
     if (innerDivRef.current) {
       innerDivRef.current.classList = '';
       innerDivRef.current.classList.add(classes.tbody);
-      if (selectable) {
+      if (selectionMode === TableSelectionMode.SINGLE_SELECT || selectionMode === TableSelectionMode.MULTI_SELECT) {
         innerDivRef.current.classList.add(classes.selectable);
       }
+      if (alternateRowColor) {
+        innerDivRef.current.classList.add(classes.alternateRowColor);
+      }
     }
-  }, [innerDivRef.current, selectable, classes.tbody, classes.selectable]);
+  }, [
+    innerDivRef.current,
+    selectionMode,
+    classes.tbody,
+    classes.selectable,
+    alternateRowColor,
+    classes.alternateRowColor
+  ]);
 
   const itemCount = Math.max(minRows, rows.length);
   const overscan = overscanCount ? overscanCount : Math.floor(visibleRows / 2);
@@ -48,7 +59,7 @@ export const VirtualTableBody = (props) => {
         columns
       }
     };
-  }, [rows, prepareRow, isTreeTable, classes, columns, alternateRowColor, selectedRow, selectedRowPath]);
+  }, [rows, prepareRow, isTreeTable, classes, columns, selectedFlatRows, selectionMode]);
 
   const getItemKey = useCallback(
     (index, data) => {

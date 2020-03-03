@@ -1,7 +1,7 @@
 import { Event } from '@ui5/webcomponents-react-base/lib/Event';
+import { withWebComponent } from '@ui5/webcomponents-react/lib/withWebComponent';
 import UI5TabContainer from '@ui5/webcomponents/dist/TabContainer';
 import React, { FC, ReactNode } from 'react';
-import { withWebComponent } from '@ui5/webcomponents-react/lib/withWebComponent';
 import { WithWebComponentPropTypes } from '../../internal/withWebComponent';
 
 export interface TabContainerPropTypes extends WithWebComponentPropTypes {
@@ -12,6 +12,11 @@ export interface TabContainerPropTypes extends WithWebComponentPropTypes {
   children?: ReactNode | ReactNode[];
 }
 
+/**
+ * <code>import { TabContainer } from '@ui5/webcomponents-react/lib/TabContainer';</code>
+ * <br />
+ * <a href="https://sap.github.io/ui5-webcomponents/playground/components/TabContainer" target="_blank">UI5 Web Components Playground</a>
+ */
 const TabContainer: FC<TabContainerPropTypes> = withWebComponent<TabContainerPropTypes>(UI5TabContainer);
 
 TabContainer.displayName = 'TabContainer';

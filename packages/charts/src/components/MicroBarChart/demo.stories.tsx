@@ -1,7 +1,6 @@
 import { array, number, text } from '@storybook/addon-knobs';
 import { MicroBarChart } from '@ui5/webcomponents-react-charts/lib/MicroBarChart';
 import React from 'react';
-import notes from './MicroBarChart.md';
 
 const dataset = [
   { value: 10, label: 'Bar Number One' },
@@ -15,9 +14,8 @@ const valueFormatter = (value) => `${value}$`;
 const labelFormatter = (value) => `${value} in Dollar`;
 
 export default {
-  title: 'Charts | Micro Bar Chart',
-  component: MicroBarChart,
-  parameters: { notes }
+  title: 'Charts / Micro Bar Chart',
+  component: MicroBarChart
 };
 
 export const defaultStory = () => <MicroBarChart dataset={dataset} />;

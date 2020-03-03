@@ -1,5 +1,3 @@
-import React, { CSSProperties, FC, ReactNode, RefObject, useCallback, useRef } from 'react';
-import { Ui5PopoverDomRef } from '../../../interfaces/Ui5PopoverDomRef';
 import { Event } from '@ui5/webcomponents-react-base/lib/Event';
 import { CustomListItem } from '@ui5/webcomponents-react/lib/CustomListItem';
 import { FlexBox } from '@ui5/webcomponents-react/lib/FlexBox';
@@ -11,6 +9,8 @@ import { PlacementType } from '@ui5/webcomponents-react/lib/PlacementType';
 import { Popover } from '@ui5/webcomponents-react/lib/Popover';
 import { PopoverHorizontalAlign } from '@ui5/webcomponents-react/lib/PopoverHorizontalAlign';
 import { StandardListItem } from '@ui5/webcomponents-react/lib/StandardListItem';
+import React, { CSSProperties, FC, ReactNode, RefObject, useCallback, useRef } from 'react';
+import { Ui5PopoverDomRef } from '../../../interfaces/Ui5PopoverDomRef';
 import { ColumnType } from '../types/ColumnType';
 
 export interface ColumnHeaderModalProperties {
@@ -77,7 +77,7 @@ export const ColumnHeaderModal: FC<ColumnHeaderModalProperties> = (props) => {
         popoverRef.current.close();
       }
     },
-    [column, popoverRef, onGroupBy]
+    [onSort, popoverRef, onGroupBy]
   );
 
   return (
@@ -104,8 +104,8 @@ export const ColumnHeaderModal: FC<ColumnHeaderModalProperties> = (props) => {
         {showFilter && !column.isGrouped && (
           <CustomListItem type={ListItemTypes.Inactive}>
             <FlexBox alignItems={FlexBoxAlignItems.Center} style={{ padding: '0px 1rem' }}>
-              <Icon name="filter" style={{ paddingRight: '1rem' }} />
-              <Filter column={column} />
+              <Icon name="filter" style={{ paddingRight: '0.5rem', minWidth: '1rem', minHeight: '1rem' }} />
+              <Filter column={column} popoverRef={popoverRef} />
             </FlexBox>
           </CustomListItem>
         )}

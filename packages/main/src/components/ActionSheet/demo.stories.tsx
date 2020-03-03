@@ -1,14 +1,12 @@
 import { select } from '@storybook/addon-knobs';
-import React from 'react';
 import { ActionSheet } from '@ui5/webcomponents-react/lib/ActionSheet';
 import { Button } from '@ui5/webcomponents-react/lib/Button';
 import { PlacementType } from '@ui5/webcomponents-react/lib/PlacementType';
-import notes from './ActionSheet.md';
+import React from 'react';
 
 export default {
-  title: 'Components | ActionSheet',
-  component: ActionSheet,
-  parameters: { notes }
+  title: 'Components / ActionSheet',
+  component: ActionSheet
 };
 
 export const defaultStory = () => (

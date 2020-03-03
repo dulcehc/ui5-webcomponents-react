@@ -3,6 +3,36 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.7.0](https://github.com/SAP/ui5-webcomponents-react/compare/v0.7.0-rc.8...v0.7.0) (2020-01-17)
+
+**Note:** Version bump only for package @ui5/webcomponents-react-base
+
+
+
+
+
+# [0.7.0-rc.8](https://github.com/SAP/ui5-webcomponents-react/compare/v0.7.0-rc.7...v0.7.0-rc.8) (2020-01-14)
+
+
+### Features
+
+* **Components:** Pass data-, aria- and id props to rendered component ([#263](https://github.com/SAP/ui5-webcomponents-react/issues/263)) ([295b8df](https://github.com/SAP/ui5-webcomponents-react/commit/295b8dfd6b3b947bf31a110e7b28bd4e55c1f652))
+
+
+
+
+
+# [0.7.0-rc.4](https://github.com/SAP/ui5-webcomponents-react/compare/@ui5/webcomponents-react-base@0.7.0-rc.3...@ui5/webcomponents-react-base@0.7.0-rc.4) (2019-12-13)
+
+
+### Features
+
+* **Form:** initial Implementation ([#242](https://github.com/SAP/ui5-webcomponents-react/issues/242)) ([c4c2848](https://github.com/SAP/ui5-webcomponents-react/commit/c4c2848))
+
+
+
+
+
 # [0.7.0-rc.3](https://github.com/SAP/ui5-webcomponents-react/compare/@ui5/webcomponents-react-base@0.7.0-rc.2...@ui5/webcomponents-react-base@0.7.0-rc.3) (2019-12-11)
 
 **Note:** Version bump only for package @ui5/webcomponents-react-base

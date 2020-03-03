@@ -1,10 +1,9 @@
 import { boolean, select } from '@storybook/addon-knobs';
-import React from 'react';
+import '@ui5/webcomponents-icons/dist/icons/sys-cancel';
 import { Icon } from '@ui5/webcomponents-react/lib/Icon';
 import { ObjectStatus } from '@ui5/webcomponents-react/lib/ObjectStatus';
 import { ValueState } from '@ui5/webcomponents-react/lib/ValueState';
-import '@ui5/webcomponents-icons/dist/icons/sys-cancel';
-import notes from './ObjectStatus.md';
+import React from 'react';
 
 export const onlyText = () => (
   <ObjectStatus state={select('state', ValueState, ValueState.Success)}>Object Status</ObjectStatus>
@@ -42,7 +41,6 @@ withIconOnly.story = {
 };
 
 export default {
-  title: 'Components | ObjectStatus',
-  component: ObjectStatus,
-  parameters: { notes }
+  title: 'Components / ObjectStatus',
+  component: ObjectStatus
 };

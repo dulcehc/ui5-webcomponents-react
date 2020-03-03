@@ -1,4 +1,6 @@
 import { StyleClassHelper } from '@ui5/webcomponents-react-base/lib/StyleClassHelper';
+import { usePassThroughHtmlProps } from '@ui5/webcomponents-react-base/lib/usePassThroughHtmlProps';
+import { useViewportRange } from '@ui5/webcomponents-react-base/lib/useViewportRange';
 import React, {
   Children,
   CSSProperties,
@@ -90,6 +92,9 @@ const getIndentFromString = (indent) => {
 
 const useStyles = createUseStyles(styles, { name: 'Grid' });
 
+/**
+ * <code>import { Grid } from '@ui5/webcomponents-react/lib/Grid';</code>
+ */
 const Grid: FC<GridPropTypes> = forwardRef((props: GridPropTypes, ref: Ref<HTMLDivElement>) => {
   const {
     children,
@@ -163,8 +168,17 @@ const Grid: FC<GridPropTypes> = forwardRef((props: GridPropTypes, ref: Ref<HTMLD
     return <div className={gridSpanClasses.valueOf()}>{child}</div>;
   };
 
+  const passThroughProps = usePassThroughHtmlProps(props);
+
   return (
-    <div ref={ref} className={gridClasses.valueOf()} style={gridStyle} title={tooltip} slot={slot}>
+    <div
+      ref={ref}
+      className={gridClasses.valueOf()}
+      style={gridStyle}
+      title={tooltip}
+      slot={slot}
+      {...passThroughProps}
+    >
       {Children.map(children, renderGridElements)}
     </div>
   );

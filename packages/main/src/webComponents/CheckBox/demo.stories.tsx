@@ -1,14 +1,12 @@
 import { action } from '@storybook/addon-actions';
 import { boolean, select, text } from '@storybook/addon-knobs';
-import React from 'react';
 import { CheckBox } from '@ui5/webcomponents-react/lib/CheckBox';
 import { ValueState } from '@ui5/webcomponents-react/lib/ValueState';
-import notes from './CheckBox.md';
+import React from 'react';
 
 export default {
-  title: 'UI5 Web Components | CheckBox',
-  component: CheckBox,
-  parameters: { notes }
+  title: 'UI5 Web Components / CheckBox',
+  component: CheckBox
 };
 
 export const defaultStory = () => (

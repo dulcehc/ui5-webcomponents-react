@@ -1,10 +1,9 @@
 import { action } from '@storybook/addon-actions';
-import { boolean, text, select } from '@storybook/addon-knobs';
-import React from 'react';
+import { boolean, select, text } from '@storybook/addon-knobs';
 import { PlacementType } from '@ui5/webcomponents-react/lib/PlacementType';
 import { TitleLevel } from '@ui5/webcomponents-react/lib/TitleLevel';
 import { VariantManagement } from '@ui5/webcomponents-react/lib/VariantManagement';
-import notes from './VariantManagement.md';
+import React from 'react';
 
 const variantItems = [
   { label: 'Variant 1', key: '1' },
@@ -27,7 +26,6 @@ renderStory.story = {
 };
 
 export default {
-  title: 'Components | VariantManagement',
-  component: VariantManagement,
-  parameters: { notes }
+  title: 'Components / VariantManagement',
+  component: VariantManagement
 };

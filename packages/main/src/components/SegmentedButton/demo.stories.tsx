@@ -1,10 +1,9 @@
 import { action } from '@storybook/addon-actions';
 import { boolean, number } from '@storybook/addon-knobs';
-import React from 'react';
 import { Icon } from '@ui5/webcomponents-react/lib/Icon';
 import { SegmentedButton } from '@ui5/webcomponents-react/lib/SegmentedButton';
 import { SegmentedButtonItem } from '@ui5/webcomponents-react/lib/SegmentedButtonItem';
-import notes from './SegmentedButton.md';
+import React from 'react';
 
 export const renderStory = () => {
   return (
@@ -28,7 +27,9 @@ renderStory.story = {
 };
 
 export default {
-  title: 'Components | SegmentedButton',
+  title: 'Components / SegmentedButton',
   component: SegmentedButton,
-  parameters: { notes }
+  parameters: {
+    subcomponents: { SegmentedButtonItem }
+  }
 };

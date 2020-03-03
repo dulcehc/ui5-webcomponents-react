@@ -1,6 +1,7 @@
-import { useConsolidatedRef } from '@ui5/webcomponents-react-base/lib/useConsolidatedRef';
-import { StyleClassHelper } from '@ui5/webcomponents-react-base/lib/StyleClassHelper';
 import { Event } from '@ui5/webcomponents-react-base/lib/Event';
+import { StyleClassHelper } from '@ui5/webcomponents-react-base/lib/StyleClassHelper';
+import { useConsolidatedRef } from '@ui5/webcomponents-react-base/lib/useConsolidatedRef';
+import { usePassThroughHtmlProps } from '@ui5/webcomponents-react-base/lib/usePassThroughHtmlProps';
 import { ContentDensity } from '@ui5/webcomponents-react/lib/ContentDensity';
 import React, {
   Children,
@@ -16,7 +17,6 @@ import React, {
 } from 'react';
 import { createUseStyles } from 'react-jss';
 import { CommonProps } from '../../interfaces/CommonProps';
-import { JSSTheme } from '../../interfaces/JSSTheme';
 
 export type SelectedKey = string | number;
 
@@ -45,8 +45,11 @@ const styles = ({ contentDensity }) => ({
   }
 });
 
-const useStyles = createUseStyles<JSSTheme, keyof ReturnType<typeof styles>>(styles, { name: 'SegmentedButton' });
+const useStyles = createUseStyles<keyof ReturnType<typeof styles>>(styles, { name: 'SegmentedButton' });
 
+/**
+ * <code>import { SegmentedButton } from '@ui5/webcomponents-react/lib/SegmentedButton';</code>
+ */
 const SegmentedButton: FC<SegmentedButtonPropTypes> = forwardRef(
   (props: SegmentedButtonPropTypes, ref: Ref<HTMLUListElement>) => {
     const { children, disabled, className, style, tooltip, slot, onItemSelected, selectedKey } = props;
@@ -93,6 +96,7 @@ const SegmentedButton: FC<SegmentedButtonPropTypes> = forwardRef(
 
     useEffect(() => {
       requestAnimationFrame(() => {
+        if (!listRef.current) return;
         let maxWidth = 0;
         for (let i = 0; i < listRef.current.childElementCount; i++) {
           const item = listRef.current.children.item(i) as HTMLLIElement;
@@ -111,6 +115,8 @@ const SegmentedButton: FC<SegmentedButtonPropTypes> = forwardRef(
       });
     }, [children, listRef]);
 
+    const passThroughProps = usePassThroughHtmlProps(props);
+
     return (
       <ul
         tabIndex={0}
@@ -120,6 +126,7 @@ const SegmentedButton: FC<SegmentedButtonPropTypes> = forwardRef(
         ref={listRef}
         title={tooltip}
         slot={slot}
+        {...passThroughProps}
       >
         {Children.toArray(children)
           .filter(Boolean)

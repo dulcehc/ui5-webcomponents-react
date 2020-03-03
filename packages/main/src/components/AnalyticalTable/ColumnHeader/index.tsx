@@ -73,12 +73,21 @@ const styles = ({ parameters }: JSSTheme) => ({
     top: 0,
     transform: 'translateX(50%)',
     zIndex: 1
+  },
+  lastColumn: {
+    right: '8px'
   }
 });
 
-const useStyles = createUseStyles<JSSTheme, keyof ReturnType<typeof styles>>(styles, { name: 'TableColumnHeader' });
+const useStyles = createUseStyles<keyof ReturnType<typeof styles>>(styles, { name: 'TableColumnHeader' });
 
-export const ColumnHeader: FC<ColumnHeaderProps> = (props) => {
+export /**
+ * <code>import { ColumnHeader } from '@ui5/webcomponents-react/lib/ColumnHeader';</code>
+ */
+/**
+ * <code>import { ColumnHeader } from '@ui5/webcomponents-react/lib/ColumnHeader';</code>
+ */
+const ColumnHeader: FC<ColumnHeaderProps> = (props) => {
   const classes = useStyles(props);
 
   const {
@@ -191,7 +200,7 @@ export const ColumnHeader: FC<ColumnHeaderProps> = (props) => {
       ) : (
         <div style={{ ...innerStyle, display: 'inline-block', cursor: 'auto' }}>{openBy}</div>
       )}
-      <div {...column.getResizerProps()} className={classes.resizer} />
+      <div {...column.getResizerProps()} className={`${classes.resizer} ${isLastColumn ? classes.lastColumn : ''}`} />
     </div>
   );
 };

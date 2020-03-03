@@ -1,13 +1,11 @@
 import { boolean, select } from '@storybook/addon-knobs';
-import React from 'react';
 import { Title } from '@ui5/webcomponents-react/lib/Title';
 import { TitleLevel } from '@ui5/webcomponents-react/lib/TitleLevel';
-import notes from './Title.md';
+import React from 'react';
 
 export default {
-  title: 'UI5 Web Components | Title',
-  component: Title,
-  parameters: { notes }
+  title: 'UI5 Web Components / Title',
+  component: Title
 };
 
 export const generatedDefaultStory = () => (

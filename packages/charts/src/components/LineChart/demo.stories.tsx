@@ -1,7 +1,6 @@
 import { boolean } from '@storybook/addon-knobs';
 import { LineChart } from '@ui5/webcomponents-react-charts/lib/LineChart';
 import React from 'react';
-import notes from './LineChart.md';
 
 const labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July'];
 const datasets = [
@@ -31,9 +30,8 @@ const renderStoryWithCustomColors = () => (
 );
 
 export default {
-  title: 'Charts | Line Chart',
-  component: LineChart,
-  parameters: { notes }
+  title: 'Charts / Line Chart',
+  component: LineChart
 };
 
 export const defaultStory = renderStory;
