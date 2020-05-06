@@ -1,12 +1,81 @@
 import { action } from '@storybook/addon-actions';
 import { text } from '@storybook/addon-knobs';
 import { DonutChart } from '@ui5/webcomponents-react-charts/lib/next/DonutChart';
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import { simpleDataSet } from '../../resources/DemoProps';
+import {Spinner} from "@ui5/webcomponents-react";
 
 export default {
   title: 'Charts - Unstable /  DonutChart',
   component: DonutChart
+};
+
+const LoadingDonutChart = ({loadingTime = 2000}) => {
+  const [loading, setLoading] = useState('initial');
+
+  useEffect(() => {
+    if(loading === 'initial') {
+      setTimeout(() => {
+        setLoading('spinner');
+      }, loadingTime);
+    }
+    if(loading === 'spinner') {
+      setTimeout(() => {
+        setLoading('loading');
+        // setData(simpleDataSet);
+      }, loadingTime);
+    }
+    if(loading === 'loading') {
+      setTimeout(() => {
+        setLoading('done');
+      }, loadingTime);
+    }
+  }, [loading, setLoading, loadingTime]);
+
+  if(loading === 'initial') return null;
+  if(loading === 'spinner') return <Spinner />;
+
+  return (
+    <DonutChart
+      onLegendClick={action('onLegendClick')}
+      onDataPointClick={action('onDataPointClick')}
+      style={{ width: '350px', height: '350px' }}
+      dataset={simpleDataSet}
+      loading={loading === 'loading'}
+      dimension={{
+        accessor: 'name'
+      }}
+      measure={{
+        accessor: 'users'
+      }}
+    />
+  );
+};
+
+const gridStyles = {
+  display: 'grid',
+  gridGap: '1rem',
+  flexDirection: 'row-reverse',
+  overflow: 'hidden',
+  position: 'relative',
+  gridTemplateColumns: '50% 50%',
+  minHeight: '200px'
+};
+
+export const renderGridStory = () => {
+  return (
+    // @ts-ignore
+    <div style={gridStyles}>
+      <LoadingDonutChart loadingTime={500} />
+      <LoadingDonutChart loadingTime={1000} />
+      <LoadingDonutChart loadingTime={1500} />
+      <LoadingDonutChart loadingTime={2000} />
+    </div>
+  );
+};
+
+renderGridStory.story = {
+  name: 'In Grid'
 };
 
 export const renderStory = () => {
