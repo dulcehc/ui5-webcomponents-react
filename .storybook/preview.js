@@ -71,6 +71,9 @@ export const globalTypes = {
     name: 'Theme',
     description: 'Fiori Theme',
     defaultValue: Themes.sap_fiori_3,
+    onClick: (e) => {
+      debugger;
+    },
     toolbar: {
       items: [
         {

@@ -1,19 +1,55 @@
 <style>
-    body {
-        font-family: '72', Arial, Helvetica, sans-serif;
-        background-color: var(--sapBackgroundColor);
-    }
+  body {
+    font-family: '72', Arial, Helvetica, sans-serif;
+    background-color: var(--sapBackgroundColor);
+  }
 
-    .pageWithPadding > section {
-        padding: 1rem;
-    }
+  .sbdocs {
+    background-color: var(--sapBackgroundColor) !important;
+  }
+
+  .sbdocs-title,
+  .sbdocs-h2,
+  .sbdocs-h3 {
+    color: var(--sapTitleColor) !important;
+  }
+
+  .docblock-argstable {
+    color: var(--sapTile_TitleTextColor) !important;
+    background-color: var(--sapTileBackground);
+  }
+
+  .docblock-argstable thead tr th {
+    color: var(--sapTile_TitleTextColor) !important;
+  }
+
+  .docblock-argstable tbody tr td {
+    background-color: var(--sapTileBackground);
+  }
+
+  .docblock-argstable tbody tr td span {
+    color: var(--sapContent_DisabledTextColor);
+  }
+
+  .sbdocs-preview {
+    background-color: var(--sapTile_Background) !important;
+  }
+
+  .sbdocs-preview > div:last-child button {
+    background-color: var(--sapButton_Emphasized_Background) !important;
+    color: var(--sapButton_Emphasized_TextColor) !important;
+  }
+
+  .pageWithPadding > section {
+    padding: 1rem;
+  }
 </style>
 <script data-ui5-config type="application/json">
-    {
-        "theme": "sap_fiori_3",
-        "language": "EN",
-        "compactSize": true
-    }
+  {
+    "theme": "sap_fiori_3",
+    "language": "EN",
+    "compactSize": true
+  }
 </script>
 
 <!--<script src="/custom-elements-es5-adapter.js"></script>-->

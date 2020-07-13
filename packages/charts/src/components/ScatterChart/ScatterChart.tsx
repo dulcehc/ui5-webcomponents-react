@@ -77,26 +77,26 @@ export interface ScatterChartProps extends IChartBaseProps<IScatterChartConfig> 
    *  - ´opacity´: number contains value of opacity of dataset
    *
    *  Example of dataset:
-   *    <code>
-   *      [
-   *        {
-   *         label: 'America',
-   *         opacity: 0.7,
-   *         data: [
-   *           {
-   *             users: 120,
-   *             sessions: 200,
-   *             volume: 302
-   *           },
-   *           {
-   *             users: 20,
-   *             sessions: 230,
-   *             volume: 392
-   *           }
-   *         ]
-   *        }
-   *      ]
-   *    </code>
+   *  ```js
+   *  [
+   *    {
+   *     label: 'America',
+   *     opacity: 0.7,
+   *     data: [
+   *       {
+   *         users: 120,
+   *         sessions: 200,
+   *         volume: 302
+   *       },
+   *       {
+   *         users: 20,
+   *         sessions: 230,
+   *         volume: 392
+   *       }
+   *     ]
+   *    }
+   *  ]
+   * ```
    */
   dataset?: ScatterDataObject[];
   /**
@@ -119,7 +119,9 @@ const measureDefaults = {
 };
 
 /**
- * <code>import { ScatterChart } from '@ui5/webcomponents-react-charts/lib/ScatterChart';</code>
+ * ```js
+ * import { ScatterChart } from '@ui5/webcomponents-react-charts/lib/ScatterChart';
+ * ```
  */
 const ScatterChart: FC<ScatterChartProps> = forwardRef((props: ScatterChartProps, ref: Ref<HTMLDivElement>) => {
   const {
