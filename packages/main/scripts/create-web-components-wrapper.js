@@ -5,6 +5,9 @@ console.warn(
   'Currently there are two tag-names missing or faulty: "ui5-notification-overflow-action" and "ui5-timeline-item"\n These have to be adjusted manually!\n'
 );
 
+// To only create a single component, add the component (module) name here:
+const CREATE_SINGLE_COMPONENT = false;
+
 const mainWebComponentsSpec = require('@ui5/webcomponents/dist/api.json');
 const fioriWebComponentsSpec = require('@ui5/webcomponents-fiori/dist/api.json');
 const dedent = require('dedent');
@@ -16,10 +19,15 @@ const fs = require('fs');
 
 const prettierConfig = {
   ...prettierConfigRaw,
-  parser: 'typescript'
+  parser: 'typescript',
 };
 
-const WEB_COMPONENTS_ROOT_DIR = path.join(PATHS.packages, 'main', 'src', 'webComponents');
+const WEB_COMPONENTS_ROOT_DIR = path.join(
+  PATHS.packages,
+  'main',
+  'src',
+  'webComponents'
+);
 const LIB_DIR = path.join(PATHS.packages, 'main', 'src', 'lib');
 
 const KNOWN_EVENTS = new Set(['click', 'input', 'submit', 'change', 'select']);
@@ -38,11 +46,11 @@ const PRIVATE_COMPONENTS = new Set([
   'ThemePropertiesProvider',
   'TreeListItem',
   'YearPicker',
-  'WheelSlider'
+  'WheelSlider',
 ]);
 
 const EXTENDED_PROP_DESCRIPTION = {
-  primaryCalendarType: `<br/><b>Note:</b> Calendar types other than Gregorian must be imported manually:<br /><code>import "@ui5/webcomponents-localization/dist/features/calendar/{primaryCalendarType}.js";</code>`
+  primaryCalendarType: `<br/><b>Note:</b> Calendar types other than Gregorian must be imported manually:<br /><code>import "@ui5/webcomponents-localization/dist/features/calendar/{primaryCalendarType}.js";</code>`,
 };
 
 const CUSTOM_DESCRIPTION_REPLACE = {
@@ -52,8 +60,8 @@ const CUSTOM_DESCRIPTION_REPLACE = {
         `<br> <Input show-suggestions> <ui5-suggestion-item text="Item #1"></ui5-suggestion-item> <ui5-suggestion-item text="Item #2"></ui5-suggestion-item> </Input>`,
         ''
       );
-    }
-  }
+    },
+  },
 };
 
 const COMPONENTS_WITHOUT_DEMOS = new Set(PRIVATE_COMPONENTS);
@@ -78,12 +86,17 @@ COMPONENTS_WITHOUT_DEMOS.add('SuggestionItem');
 COMPONENTS_WITHOUT_DEMOS.add('UploadCollectionItem');
 COMPONENTS_WITHOUT_DEMOS.add('NotificationOverflowAction');
 
-const componentsFromFioriPackage = new Set(fioriWebComponentsSpec.symbols.map((componentSpec) => componentSpec.module));
+const componentsFromFioriPackage = new Set(
+  fioriWebComponentsSpec.symbols.map((componentSpec) => componentSpec.module)
+);
 
 const capitalizeFirstLetter = (s) => s.charAt(0).toUpperCase() + s.slice(1);
-const snakeToCamel = (str) => str.replace(/([-_]\w)/g, (g) => g[1].toUpperCase());
+const snakeToCamel = (str) =>
+  str.replace(/([-_]\w)/g, (g) => g[1].toUpperCase());
 const filterNonPublicAttributes = (prop) =>
-  prop.visibility === 'public' && prop.readonly !== 'true' && prop.static !== true;
+  prop.visibility === 'public' &&
+  prop.readonly !== 'true' &&
+  prop.static !== true;
 
 const replaceTagNameWithModuleName = (description) => {
   // replace all tag occurrences in description with module name
@@ -91,9 +104,14 @@ const replaceTagNameWithModuleName = (description) => {
     const start = description.indexOf(`<code>ui5-`) + 6;
     const end = description.indexOf(`</code>`, start);
     const tagName = description.slice(start, end);
-    const webComponentWithTagName = allWebComponents.find((item) => item.tagname === tagName);
+    const webComponentWithTagName = allWebComponents.find(
+      (item) => item.tagname === tagName
+    );
     if (webComponentWithTagName) {
-      description = description.replace(webComponentWithTagName.tagname, webComponentWithTagName.module);
+      description = description.replace(
+        webComponentWithTagName.tagname,
+        webComponentWithTagName.module
+      );
     }
   });
   return description;
@@ -106,12 +124,12 @@ const getTypeScriptTypeForProperty = (property) => {
     case 'String':
       return {
         importStatement: null,
-        tsType: 'string'
+        tsType: 'string',
       };
     case 'undefined':
       return {
         importStatement: null,
-        tsType: 'unknown'
+        tsType: 'unknown',
       };
     case 'number':
     case 'Number':
@@ -119,29 +137,29 @@ const getTypeScriptTypeForProperty = (property) => {
     case 'Float':
       return {
         importStatement: null,
-        tsType: 'number'
+        tsType: 'number',
       };
     case 'boolean':
     case 'Boolean':
       return {
         importStatement: null,
-        tsType: 'boolean'
+        tsType: 'boolean',
       };
     case 'Array':
       return {
         importStatement: null,
-        tsType: 'unknown[]'
+        tsType: 'unknown[]',
       };
     case 'File': {
       return {
         importStatement: null,
-        tsType: 'File'
+        tsType: 'File',
       };
     }
     case 'FileList': {
       return {
         importStatement: null,
-        tsType: 'FileList'
+        tsType: 'FileList',
       };
     }
 
@@ -150,181 +168,205 @@ const getTypeScriptTypeForProperty = (property) => {
     case 'HTMLElement[]':
       return {
         tsType: 'ReactNode | ReactNode[]',
-        importStatement: "import { ReactNode } from 'react';"
+        importStatement: "import { ReactNode } from 'react';",
       };
     case 'HTMLElement':
       return {
         tsType: 'ReactNode',
-        importStatement: "import { ReactNode } from 'react';"
+        importStatement: "import { ReactNode } from 'react';",
       };
     // UI5 Web Component Enums
     case 'AvatarBackgroundColor':
       return {
-        importStatement: "import { AvatarBackgroundColor } from '@ui5/webcomponents-react/lib/AvatarBackgroundColor';",
+        importStatement:
+          "import { AvatarBackgroundColor } from '@ui5/webcomponents-react/lib/AvatarBackgroundColor';",
         tsType: 'AvatarBackgroundColor',
-        isEnum: true
+        isEnum: true,
       };
     case 'AvatarFitType':
       return {
-        importStatement: "import { AvatarFitType } from '@ui5/webcomponents-react/lib/AvatarFitType';",
+        importStatement:
+          "import { AvatarFitType } from '@ui5/webcomponents-react/lib/AvatarFitType';",
         tsType: 'AvatarFitType',
-        isEnum: true
+        isEnum: true,
       };
     case 'AvatarShape':
       return {
-        importStatement: "import { AvatarShape } from '@ui5/webcomponents-react/lib/AvatarShape';",
+        importStatement:
+          "import { AvatarShape } from '@ui5/webcomponents-react/lib/AvatarShape';",
         tsType: 'AvatarShape',
-        isEnum: true
+        isEnum: true,
       };
     case 'AvatarSize':
       return {
-        importStatement: "import { AvatarSize } from '@ui5/webcomponents-react/lib/AvatarSize';",
+        importStatement:
+          "import { AvatarSize } from '@ui5/webcomponents-react/lib/AvatarSize';",
         tsType: 'AvatarSize',
-        isEnum: true
+        isEnum: true,
       };
     case 'BusyIndicatorSize':
       return {
-        importStatement: "import { BusyIndicatorSize } from '@ui5/webcomponents-react/lib/BusyIndicatorSize';",
+        importStatement:
+          "import { BusyIndicatorSize } from '@ui5/webcomponents-react/lib/BusyIndicatorSize';",
         tsType: 'BusyIndicatorSize',
-        isEnum: true
+        isEnum: true,
       };
     case 'ButtonDesign':
       return {
-        importStatement: "import { ButtonDesign } from '@ui5/webcomponents-react/lib/ButtonDesign';",
+        importStatement:
+          "import { ButtonDesign } from '@ui5/webcomponents-react/lib/ButtonDesign';",
         tsType: 'ButtonDesign',
-        isEnum: true
+        isEnum: true,
       };
     case 'CalendarType':
       return {
-        importStatement: "import { CalendarType } from '@ui5/webcomponents-react/lib/CalendarType';",
+        importStatement:
+          "import { CalendarType } from '@ui5/webcomponents-react/lib/CalendarType';",
         tsType: 'CalendarType',
-        isEnum: true
+        isEnum: true,
       };
     case 'CarouselArrowsPlacement':
       return {
         importStatement:
           "import { CarouselArrowsPlacement } from '@ui5/webcomponents-react/lib/CarouselArrowsPlacement';",
         tsType: 'CarouselArrowsPlacement',
-        isEnum: true
+        isEnum: true,
       };
     case 'FCLLayout':
       return {
-        importStatement: "import { FCLLayout } from '@ui5/webcomponents-react/lib/FCLLayout';",
+        importStatement:
+          "import { FCLLayout } from '@ui5/webcomponents-react/lib/FCLLayout';",
         tsType: 'FCLLayout',
-        isEnum: true
+        isEnum: true,
       };
     case 'InputType':
       return {
-        importStatement: "import { InputType } from '@ui5/webcomponents-react/lib/InputType';",
+        importStatement:
+          "import { InputType } from '@ui5/webcomponents-react/lib/InputType';",
         tsType: 'InputType',
-        isEnum: true
+        isEnum: true,
       };
     case 'LinkDesign':
       return {
-        importStatement: "import { LinkDesign } from '@ui5/webcomponents-react/lib/LinkDesign';",
+        importStatement:
+          "import { LinkDesign } from '@ui5/webcomponents-react/lib/LinkDesign';",
         tsType: 'LinkDesign',
-        isEnum: true
+        isEnum: true,
       };
     case 'ListItemType': {
       // TODO Should we use the singular ListItemType here?
       return {
-        importStatement: "import { ListItemTypes } from '@ui5/webcomponents-react/lib/ListItemTypes';",
+        importStatement:
+          "import { ListItemTypes } from '@ui5/webcomponents-react/lib/ListItemTypes';",
         tsType: 'ListItemTypes',
-        isEnum: true
+        isEnum: true,
       };
     }
     case 'ListMode': {
       return {
-        importStatement: "import { ListMode } from '@ui5/webcomponents-react/lib/ListMode';",
+        importStatement:
+          "import { ListMode } from '@ui5/webcomponents-react/lib/ListMode';",
         tsType: 'ListMode',
-        isEnum: true
+        isEnum: true,
       };
     }
     case 'ListSeparators':
       return {
-        importStatement: "import { ListSeparators } from '@ui5/webcomponents-react/lib/ListSeparators';",
+        importStatement:
+          "import { ListSeparators } from '@ui5/webcomponents-react/lib/ListSeparators';",
         tsType: 'ListSeparators',
-        isEnum: true
+        isEnum: true,
       };
     case 'MessageStripType':
       return {
-        importStatement: "import { MessageStripType } from '@ui5/webcomponents-react/lib/MessageStripType';",
+        importStatement:
+          "import { MessageStripType } from '@ui5/webcomponents-react/lib/MessageStripType';",
         tsType: 'MessageStripType',
-        isEnum: true
+        isEnum: true,
       };
     case 'PanelAccessibleRole':
       return {
-        importStatement: "import { PanelAccessibleRoles } from '@ui5/webcomponents-react/lib/PanelAccessibleRoles';",
+        importStatement:
+          "import { PanelAccessibleRoles } from '@ui5/webcomponents-react/lib/PanelAccessibleRoles';",
         tsType: 'PanelAccessibleRoles',
-        isEnum: true
+        isEnum: true,
       };
     case 'PopoverHorizontalAlign':
       return {
         importStatement:
           "import { PopoverHorizontalAlign } from '@ui5/webcomponents-react/lib/PopoverHorizontalAlign';",
         tsType: 'PopoverHorizontalAlign',
-        isEnum: true
+        isEnum: true,
       };
     case 'PopoverPlacementType':
       return {
-        importStatement: "import { PlacementType } from '@ui5/webcomponents-react/lib/PlacementType';",
+        importStatement:
+          "import { PlacementType } from '@ui5/webcomponents-react/lib/PlacementType';",
         tsType: 'PlacementType',
-        isEnum: true
+        isEnum: true,
       };
     case 'PopoverVerticalAlign':
       return {
-        importStatement: "import { PopoverVerticalAlign } from '@ui5/webcomponents-react/lib/PopoverVerticalAlign';",
+        importStatement:
+          "import { PopoverVerticalAlign } from '@ui5/webcomponents-react/lib/PopoverVerticalAlign';",
         tsType: 'PopoverVerticalAlign',
-        isEnum: true
+        isEnum: true,
       };
     case 'Priority':
       return {
-        importStatement: "import { Priority } from '@ui5/webcomponents-react/lib/Priority';",
+        importStatement:
+          "import { Priority } from '@ui5/webcomponents-react/lib/Priority';",
         tsType: 'Priority',
-        isEnum: true
+        isEnum: true,
       };
     case 'SemanticColor':
       return {
-        importStatement: "import { SemanticColor } from '@ui5/webcomponents-react/lib/SemanticColor';",
+        importStatement:
+          "import { SemanticColor } from '@ui5/webcomponents-react/lib/SemanticColor';",
         tsType: 'SemanticColor',
-        isEnum: true
+        isEnum: true,
       };
     case 'TabLayout':
       return {
-        importStatement: "import { TabLayout } from '@ui5/webcomponents-react/lib/TabLayout';",
+        importStatement:
+          "import { TabLayout } from '@ui5/webcomponents-react/lib/TabLayout';",
         tsType: 'TabLayout',
-        isEnum: true
+        isEnum: true,
       };
     case 'TabContainerTabsPlacement':
       return {
         importStatement:
           "import { TabContainerTabsPlacement } from '@ui5/webcomponents-react/lib/TabContainerTabsPlacement';",
         tsType: 'TabContainerTabsPlacement',
-        isEnum: true
+        isEnum: true,
       };
     case 'TitleLevel':
       return {
-        importStatement: "import { TitleLevel } from '@ui5/webcomponents-react/lib/TitleLevel';",
+        importStatement:
+          "import { TitleLevel } from '@ui5/webcomponents-react/lib/TitleLevel';",
         tsType: 'TitleLevel',
-        isEnum: true
+        isEnum: true,
       };
     case 'ToastPlacement':
       return {
-        importStatement: "import { ToastPlacement } from '@ui5/webcomponents-react/lib/ToastPlacement';",
+        importStatement:
+          "import { ToastPlacement } from '@ui5/webcomponents-react/lib/ToastPlacement';",
         tsType: 'ToastPlacement',
-        isEnum: true
+        isEnum: true,
       };
     case 'UploadState':
       return {
-        importStatement: "import { UploadState } from '@ui5/webcomponents-react/lib/UploadState';",
+        importStatement:
+          "import { UploadState } from '@ui5/webcomponents-react/lib/UploadState';",
         tsType: 'UploadState',
-        isEnum: true
+        isEnum: true,
       };
     case 'ValueState':
       return {
-        importStatement: "import { ValueState } from '@ui5/webcomponents-react/lib/ValueState';",
+        importStatement:
+          "import { ValueState } from '@ui5/webcomponents-react/lib/ValueState';",
         tsType: 'ValueState',
-        isEnum: true
+        isEnum: true,
       };
     default:
       throw new Error(`Unknown type ${JSON.stringify(property)}`);
@@ -335,11 +377,18 @@ const getEventParameters = (parameters) => {
   const resolvedEventParameters = parameters.map((property) => {
     return {
       ...property,
-      ...getTypeScriptTypeForProperty(property)
+      ...getTypeScriptTypeForProperty(property),
     };
   });
 
   const importStatements = [];
+
+  if (resolvedEventParameters.length === 0) {
+    return {
+      tsType: `(event: CustomEvent) => void`,
+      importStatements,
+    };
+  }
 
   const detailPayload = resolvedEventParameters.map((parameter) => {
     if (parameter.importStatement) {
@@ -350,7 +399,7 @@ const getEventParameters = (parameters) => {
 
   return {
     tsType: `(event: CustomEvent<{${detailPayload.join('; ')}}>) => void`,
-    importStatements
+    importStatements,
   };
 };
 
@@ -366,11 +415,15 @@ const createWebComponentWrapper = (
   slotProps,
   eventProps
 ) => {
-  const eventsToBeOmitted = eventProps.filter((eventName) => KNOWN_EVENTS.has(eventName));
+  const eventsToBeOmitted = eventProps.filter((eventName) =>
+    KNOWN_EVENTS.has(eventName)
+  );
   let tsExtendsStatement = 'WithWebComponentPropTypes';
   if (eventsToBeOmitted.length > 0) {
     tsExtendsStatement = `Omit<WithWebComponentPropTypes, ${eventsToBeOmitted
-      .map((eventName) => `'on${capitalizeFirstLetter(snakeToCamel(eventName))}'`)
+      .map(
+        (eventName) => `'on${capitalizeFirstLetter(snakeToCamel(eventName))}'`
+      )
       .join(' | ')}>`;
   }
   let componentDescription;
@@ -378,7 +431,7 @@ const createWebComponentWrapper = (
     componentDescription = prettier
       .format(description, {
         ...prettierConfigRaw,
-        parser: 'html'
+        parser: 'html',
       })
       .replace(/\s\s+/g, ' ');
   } catch (e) {
@@ -390,7 +443,9 @@ const createWebComponentWrapper = (
   return prettier.format(
     `
     import { withWebComponent, WithWebComponentPropTypes } from '@ui5/webcomponents-react/lib/withWebComponent';
-    import '@ui5/webcomponents${componentsFromFioriPackage.has(name) ? '-fiori' : ''}/dist/${name}';
+    import '@ui5/webcomponents${
+      componentsFromFioriPackage.has(name) ? '-fiori' : ''
+    }/dist/${name}';
     import { FC } from 'react';
     ${importStatements.join('\n')}
 
@@ -452,21 +507,43 @@ const createWebComponentDemo = (componentSpec, componentProps, description) => {
   const args = [];
   const customArgTypes = [];
 
-  const additionalComponentDocs = componentSpec.hasOwnProperty('appenddocs') ? componentSpec.appenddocs.split(' ') : [];
+  const additionalComponentDocs = componentSpec.hasOwnProperty('appenddocs')
+    ? componentSpec.appenddocs.split(' ')
+    : [];
   const additionalComponentImports = additionalComponentDocs.map(
-    (component) => `import { ${component} } from '@ui5/webcomponents-react/lib/${component}';`
+    (component) =>
+      `import { ${component} } from '@ui5/webcomponents-react/lib/${component}';`
   );
 
   componentProps.forEach((prop) => {
-    if (prop.importStatement && prop.importStatement !== `import { ReactNode } from 'react';`) {
+    if (
+      prop.importStatement &&
+      prop.importStatement !== `import { ReactNode } from 'react';`
+    ) {
       enumImports.push(prop.importStatement);
     }
+    if (componentSpec.module === 'Icon' && prop.name === 'name') {
+      enumImports.push(
+        `import "@ui5/webcomponents-icons/dist/icons/employee.js";`
+      );
+      args.push(`name: 'employee'`);
+    }
     if (prop.name === 'primaryCalendarType') {
-      enumImports.push(`import "@ui5/webcomponents-localization/dist/features/calendar/Gregorian.js";`);
-      enumImports.push(`import "@ui5/webcomponents-localization/dist/features/calendar/Buddhist.js";`);
-      enumImports.push(`import "@ui5/webcomponents-localization/dist/features/calendar/Islamic.js";`);
-      enumImports.push(`import "@ui5/webcomponents-localization/dist/features/calendar/Japanese.js";`);
-      enumImports.push(`import "@ui5/webcomponents-localization/dist/features/calendar/Persian.js";`);
+      enumImports.push(
+        `import "@ui5/webcomponents-localization/dist/features/calendar/Gregorian.js";`
+      );
+      enumImports.push(
+        `import "@ui5/webcomponents-localization/dist/features/calendar/Buddhist.js";`
+      );
+      enumImports.push(
+        `import "@ui5/webcomponents-localization/dist/features/calendar/Islamic.js";`
+      );
+      enumImports.push(
+        `import "@ui5/webcomponents-localization/dist/features/calendar/Japanese.js";`
+      );
+      enumImports.push(
+        `import "@ui5/webcomponents-localization/dist/features/calendar/Persian.js";`
+      );
     }
     if (prop.name === 'children') {
       if (
@@ -480,8 +557,12 @@ const createWebComponentDemo = (componentSpec, componentProps, description) => {
         customArgTypes.push(`children: {control: {disable:true}}`);
       }
     } else if (prop.name === 'icon') {
-      enumImports.push(`import "@ui5/webcomponents-icons/dist/icons/employee.js";`);
-      enumImports.push(`import { Icon } from '@ui5/webcomponents-react/lib/Icon';`);
+      enumImports.push(
+        `import "@ui5/webcomponents-icons/dist/icons/employee.js";`
+      );
+      enumImports.push(
+        `import { Icon } from '@ui5/webcomponents-react/lib/Icon';`
+      );
       if (prop.tsType === 'string') {
         args.push(`icon: 'employee'`);
       }
@@ -494,7 +575,9 @@ const createWebComponentDemo = (componentSpec, componentProps, description) => {
     }
     if (prop.isEnum) {
       selectArgTypes.push(`${prop.name}: ${prop.tsType}`);
-      const defaultValue = prop.defaultValue ? `.${prop.defaultValue.replace(/['"]/g, '')}` : '';
+      const defaultValue = prop.defaultValue
+        ? `.${prop.defaultValue.replace(/['"]/g, '')}`
+        : '';
       args.push(`${prop.name}: ${prop.tsType}${defaultValue}`);
     }
   });
@@ -512,10 +595,14 @@ const createWebComponentDemo = (componentSpec, componentProps, description) => {
   customArgTypes.push(
     `className: {type: 'string', description: "CSS Class Name which will be appended to the most outer element of a component. Use this prop carefully, overwriting CSS rules might break the component."}`
   );
-  customArgTypes.push(`tooltip: {type: 'string', description: "A tooltip which will be shown on hover"}`);
+  customArgTypes.push(
+    `tooltip: {type: 'string', description: "A tooltip which will be shown on hover"}`
+  );
   enumImports.push(`import { CSSProperties, Ref } from 'react';`);
 
-  let formattedDescription = description.replace(/<br>/g, `<br/>`).replace(/\s\s+/g, ' ');
+  let formattedDescription = description
+    .replace(/<br>/g, `<br/>`)
+    .replace(/\s\s+/g, ' ');
 
   try {
     if (componentSpec.module === 'Link') {
@@ -526,7 +613,7 @@ const createWebComponentDemo = (componentSpec, componentProps, description) => {
         formattedDescription,
         {
           ...prettierConfigRaw,
-          parser: 'html'
+          parser: 'html',
         }
       )}</div>`;
     }
@@ -549,9 +636,15 @@ const createWebComponentDemo = (componentSpec, componentProps, description) => {
     <Meta
      title="UI5 Web Components / ${componentName}"
      component={${componentName}}
-     ${additionalComponentDocs.length > 0 ? `subcomponents={{ ${additionalComponentDocs.join(', ')} }}` : ''}
+     ${
+       additionalComponentDocs.length > 0
+         ? `subcomponents={{ ${additionalComponentDocs.join(', ')} }}`
+         : ''
+     }
      argTypes={{
-       ...createSelectArgTypes({${selectArgTypes.join(', ')}}),${customArgTypes.join(',\n')}
+       ...createSelectArgTypes({${selectArgTypes.join(
+         ', '
+       )}}),${customArgTypes.join(',\n')}
      }}
      args={{
        ${args.join(',\n')}
@@ -578,11 +671,18 @@ const createWebComponentDemo = (componentSpec, componentProps, description) => {
 };
 
 const allWebComponents = [
-  ...mainWebComponentsSpec.symbols.filter((spec) => !spec.module.startsWith('types/')),
-  ...fioriWebComponentsSpec.symbols.filter((spec) => !spec.module.startsWith('types/'))
+  ...mainWebComponentsSpec.symbols.filter(
+    (spec) => !spec.module.startsWith('types/')
+  ),
+  ...fioriWebComponentsSpec.symbols.filter(
+    (spec) => !spec.module.startsWith('types/')
+  ),
 ];
 
-const assignComponentPropertiesToMaps = (componentSpec, { properties, slots, events }) => {
+const assignComponentPropertiesToMaps = (
+  componentSpec,
+  { properties, slots, events }
+) => {
   (componentSpec.properties || []).forEach((prop) => {
     if (!properties.has(prop.name)) {
       properties.set(prop.name, prop);
@@ -600,7 +700,10 @@ const assignComponentPropertiesToMaps = (componentSpec, { properties, slots, eve
   });
 };
 
-const recursivePropertyResolver = (componentSpec, { properties, slots, events }) => {
+const recursivePropertyResolver = (
+  componentSpec,
+  { properties, slots, events }
+) => {
   assignComponentPropertiesToMaps(componentSpec, { properties, slots, events });
   if (
     componentSpec.extends === 'UI5Element' ||
@@ -610,15 +713,24 @@ const recursivePropertyResolver = (componentSpec, { properties, slots, events })
     return { properties, slots, events };
   }
 
-  const parentComponent = allWebComponents.find((c) => c.module === componentSpec.extends);
+  const parentComponent = allWebComponents.find(
+    (c) => c.module === componentSpec.extends
+  );
   if (parentComponent) {
-    return recursivePropertyResolver(parentComponent, { properties, slots, events });
+    return recursivePropertyResolver(parentComponent, {
+      properties,
+      slots,
+      events,
+    });
   }
   throw new Error('Unknown Parent Component!');
 };
 
 const resolveInheritedAttributes = (componentSpec) => {
-  if (componentSpec.extends === 'UI5Element' || componentSpec.extends === 'sap.ui.webcomponents.base.UI5Element') {
+  if (
+    componentSpec.extends === 'UI5Element' ||
+    componentSpec.extends === 'sap.ui.webcomponents.base.UI5Element'
+  ) {
     // no inheritance, just return the component
     return componentSpec;
   }
@@ -644,8 +756,16 @@ resolvedWebComponents.forEach((componentSpec) => {
   const propTypes = [];
   const importStatements = [];
   const defaultProps = [];
-  const allComponentProperties = [...(componentSpec.properties || []), ...(componentSpec.slots || [])]
-    .filter((prop) => prop.visibility === 'public' && prop.readonly !== 'true' && prop.static !== true)
+  const allComponentProperties = [
+    ...(componentSpec.properties || []),
+    ...(componentSpec.slots || []),
+  ]
+    .filter(
+      (prop) =>
+        prop.visibility === 'public' &&
+        prop.readonly !== 'true' &&
+        prop.static !== true
+    )
     .map((property) => {
       const tsType = getTypeScriptTypeForProperty(property);
       if (tsType.importStatement) {
@@ -662,16 +782,27 @@ resolvedWebComponents.forEach((componentSpec) => {
         let formattedDescription = (property.description || '')
           .replace(/\n\n<br><br> /g, '<br/><br/>\n  *\n  * ')
           .replace(/\n\n/g, '<br/><br/>\n  *\n  * ')
-          .replace(new RegExp(componentSpec.tagname, 'g'), `${componentSpec.module}`);
+          .replace(
+            new RegExp(componentSpec.tagname, 'g'),
+            `${componentSpec.module}`
+          );
 
-        const customDescriptionReplace = CUSTOM_DESCRIPTION_REPLACE[componentSpec.module];
-        if (customDescriptionReplace && customDescriptionReplace[property.name]) {
-          formattedDescription = customDescriptionReplace[property.name](formattedDescription);
+        const customDescriptionReplace =
+          CUSTOM_DESCRIPTION_REPLACE[componentSpec.module];
+        if (
+          customDescriptionReplace &&
+          customDescriptionReplace[property.name]
+        ) {
+          formattedDescription = customDescriptionReplace[property.name](
+            formattedDescription
+          );
         }
 
         const extendedDescription = EXTENDED_PROP_DESCRIPTION[property.name];
         if (extendedDescription) {
-          return replaceTagNameWithModuleName(`${formattedDescription}${extendedDescription}`);
+          return replaceTagNameWithModuleName(
+            `${formattedDescription}${extendedDescription}`
+          );
         }
         return replaceTagNameWithModuleName(formattedDescription);
       };
@@ -685,17 +816,27 @@ resolvedWebComponents.forEach((componentSpec) => {
 
       if (property.hasOwnProperty('defaultValue')) {
         if (tsType.tsType === 'boolean') {
-          defaultProps.push(`${property.name}: ${property.defaultValue === 'true'}`);
+          defaultProps.push(
+            `${property.name}: ${property.defaultValue === 'true'}`
+          );
         } else if (tsType.isEnum === true) {
-          defaultProps.push(`${property.name}: ${tsType.tsType}.${property.defaultValue.replace(/['"]/g, '')}`);
-        } else if (tsType.tsType !== 'string' || (tsType.tsType === 'string' && property.defaultValue !== '""')) {
+          defaultProps.push(
+            `${property.name}: ${tsType.tsType}.${property.defaultValue.replace(
+              /['"]/g,
+              ''
+            )}`
+          );
+        } else if (
+          tsType.tsType !== 'string' ||
+          (tsType.tsType === 'string' && property.defaultValue !== '""')
+        ) {
           defaultProps.push(`${property.name}: ${property.defaultValue}`);
         }
       }
 
       return {
         ...property,
-        ...tsType
+        ...tsType,
       };
     });
 
@@ -708,7 +849,9 @@ resolvedWebComponents.forEach((componentSpec) => {
       /**
        * ${replaceTagNameWithModuleName(eventSpec.description)}
        */
-       on${capitalizeFirstLetter(snakeToCamel(eventSpec.name))}?: ${eventParameters.tsType};
+       on${capitalizeFirstLetter(snakeToCamel(eventSpec.name))}?: ${
+        eventParameters.tsType
+      };
       `);
     });
 
@@ -717,14 +860,23 @@ resolvedWebComponents.forEach((componentSpec) => {
   const formatDescription = () => {
     let description = componentSpec.description;
     //strip overview heading
-    description = description.replace(`<h3 class="comment-api-title">Overview</h3>`, '');
+    description = description.replace(
+      `<h3 class="comment-api-title">Overview</h3>`,
+      ''
+    );
     //strip ES6 Module import
-    description = description.slice(0, description.indexOf(`<h3>ES6 Module Import</h3>`));
+    description = description.slice(
+      0,
+      description.indexOf(`<h3>ES6 Module Import</h3>`)
+    );
     if (!componentSpec.tagname) {
       return description.split(/(?=<h3>)/, 2);
     }
     //replace tag-name with module-name
-    description = description.replace(new RegExp(componentSpec.tagname, 'g'), `${componentSpec.module}`);
+    description = description.replace(
+      new RegExp(componentSpec.tagname, 'g'),
+      `${componentSpec.module}`
+    );
     //replace other ui5 tag-names
     description = replaceTagNameWithModuleName(description);
     //split string by main description and rest
@@ -732,59 +884,101 @@ resolvedWebComponents.forEach((componentSpec) => {
   };
 
   const [mainDescription, description = ''] = formatDescription();
+  if (
+    CREATE_SINGLE_COMPONENT === componentSpec.module ||
+    !CREATE_SINGLE_COMPONENT
+  ) {
+    const webComponentWrapper = createWebComponentWrapper(
+      componentSpec.module,
+      componentSpec.tagname,
+      mainDescription,
+      propTypes,
+      uniqueAdditionalImports,
+      defaultProps,
+      (componentSpec.properties || [])
+        .filter(filterNonPublicAttributes)
+        .filter(({ type }) => type !== 'boolean' && type !== 'Boolean')
+        .map(({ name }) => name),
+      (componentSpec.properties || [])
+        .filter(filterNonPublicAttributes)
+        .filter(({ type }) => type === 'boolean' || type === 'Boolean')
+        .map(({ name }) => name),
+      (componentSpec.slots || [])
+        .filter(filterNonPublicAttributes)
+        .map(({ name }) => name),
+      (componentSpec.events || [])
+        .filter(filterNonPublicAttributes)
+        .map(({ name }) => name)
+    );
 
-  const webComponentWrapper = createWebComponentWrapper(
-    componentSpec.module,
-    componentSpec.tagname,
-    mainDescription,
-    propTypes,
-    uniqueAdditionalImports,
-    defaultProps,
-    (componentSpec.properties || [])
-      .filter(filterNonPublicAttributes)
-      .filter(({ type }) => type !== 'boolean' && type !== 'Boolean')
-      .map(({ name }) => name),
-    (componentSpec.properties || [])
-      .filter(filterNonPublicAttributes)
-      .filter(({ type }) => type === 'boolean' || type === 'Boolean')
-      .map(({ name }) => name),
-    (componentSpec.slots || []).filter(filterNonPublicAttributes).map(({ name }) => name),
-    (componentSpec.events || []).filter(filterNonPublicAttributes).map(({ name }) => name)
-  );
+    // check if folder exists and create it if necessary
+    const webComponentFolderPath = path.join(
+      WEB_COMPONENTS_ROOT_DIR,
+      componentSpec.module
+    );
+    if (!fs.existsSync(webComponentFolderPath)) {
+      fs.mkdirSync(webComponentFolderPath);
+    }
 
-  // check if folder exists and create it if necessary
-  const webComponentFolderPath = path.join(WEB_COMPONENTS_ROOT_DIR, componentSpec.module);
-  if (!fs.existsSync(webComponentFolderPath)) {
-    fs.mkdirSync(webComponentFolderPath);
-  }
+    fs.writeFileSync(
+      path.join(webComponentFolderPath, 'index.tsx'),
+      webComponentWrapper
+    );
 
-  fs.writeFileSync(path.join(webComponentFolderPath, 'index.tsx'), webComponentWrapper);
-
-  // create lib export
-  const libContent = prettier.format(
-    `
+    // create lib export
+    const libContent = prettier.format(
+      `
     import { ${componentSpec.module} } from '../webComponents/${componentSpec.module}';
     import type { ${componentSpec.module}PropTypes } from '../webComponents/${componentSpec.module}';
 
     export { ${componentSpec.module} };
     export type { ${componentSpec.module}PropTypes };`,
-    prettierConfig
-  );
-  fs.writeFileSync(path.join(LIB_DIR, `${componentSpec.module}.ts`), libContent);
+      prettierConfig
+    );
+    fs.writeFileSync(
+      path.join(LIB_DIR, `${componentSpec.module}.ts`),
+      libContent
+    );
 
-  // create test
-  if (!fs.existsSync(path.join(webComponentFolderPath, `${componentSpec.module}.test.tsx`))) {
-    const webComponentTest = createWebComponentTest(componentSpec.module);
-    fs.writeFileSync(path.join(webComponentFolderPath, `${componentSpec.module}.test.tsx`), webComponentTest);
-  }
+    // create test
+    if (
+      !fs.existsSync(
+        path.join(webComponentFolderPath, `${componentSpec.module}.test.tsx`)
+      )
+    ) {
+      const webComponentTest = createWebComponentTest(componentSpec.module);
+      fs.writeFileSync(
+        path.join(webComponentFolderPath, `${componentSpec.module}.test.tsx`),
+        webComponentTest
+      );
+    }
 
-  // create demo
-  if (
-    !fs.existsSync(path.join(webComponentFolderPath, `${componentSpec.module}.stories.tsx`)) &&
-    !fs.existsSync(path.join(webComponentFolderPath, `${componentSpec.module}.stories.mdx`)) &&
-    !COMPONENTS_WITHOUT_DEMOS.has(componentSpec.module)
-  ) {
-    const webComponentDemo = createWebComponentDemo(componentSpec, allComponentProperties, description);
-    fs.writeFileSync(path.join(webComponentFolderPath, `${componentSpec.module}.stories.mdx`), webComponentDemo);
+    // create demo
+    if (
+      CREATE_SINGLE_COMPONENT === componentSpec.module ||
+      (!fs.existsSync(
+        path.join(webComponentFolderPath, `${componentSpec.module}.stories.tsx`)
+      ) &&
+        !fs.existsSync(
+          path.join(
+            webComponentFolderPath,
+            `${componentSpec.module}.stories.mdx`
+          )
+        ) &&
+        !COMPONENTS_WITHOUT_DEMOS.has(componentSpec.module))
+    ) {
+      const webComponentDemo = createWebComponentDemo(
+        componentSpec,
+        allComponentProperties,
+        description
+      );
+      fs.writeFileSync(
+        path.join(
+          webComponentFolderPath,
+          `${componentSpec.module}.stories.mdx`
+        ),
+        webComponentDemo
+      );
+    }
   }
 });

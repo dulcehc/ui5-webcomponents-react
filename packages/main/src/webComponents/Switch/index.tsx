@@ -1,8 +1,12 @@
-import { withWebComponent, WithWebComponentPropTypes } from '@ui5/webcomponents-react/lib/withWebComponent';
+import {
+  withWebComponent,
+  WithWebComponentPropTypes,
+} from '@ui5/webcomponents-react/lib/withWebComponent';
 import '@ui5/webcomponents/dist/Switch';
 import { FC } from 'react';
 
-export interface SwitchPropTypes extends Omit<WithWebComponentPropTypes, 'onChange'> {
+export interface SwitchPropTypes
+  extends Omit<WithWebComponentPropTypes, 'onChange'> {
   /**
    * Defines if the <code>Switch</code> is checked. <br><br> <b>Note:</b> The property can be changed with user interaction, either by cliking/tapping on the <code>Switch</code>, or by pressing the <code>Enter</code> or <code>Space</code> key.
    */
@@ -28,14 +32,14 @@ export interface SwitchPropTypes extends Omit<WithWebComponentPropTypes, 'onChan
   /**
    * Fired when the <code>Switch</code> checked state changes.
    */
-  onChange?: (event: CustomEvent<{}>) => void;
+  onChange?: (event: CustomEvent) => void;
 }
 
 /**
  * The <code>Switch</code> component is used for changing between binary states. <br />
  The component can display texts, that will be switched, based on the component state, via the <code>textOn</code> and
  <code>textOff</code> properties, but texts longer than 3 letters will be cutted off. <br />
- However, users are able to customize the width of <code>Switch</code> with pure CSS (&lt;Switch style="width: 200px">),
+ However, users are able to customize the width of <code>Switch</code> with pure CSS (&lt;Switch style={{width: "200px"}}/>),
  and set widths, depending on the texts they would use. <br />
  Note: the component would not automatically stretch to fit the whole text width.
 
@@ -54,7 +58,7 @@ Switch.displayName = 'Switch';
 Switch.defaultProps = {
   checked: false,
   disabled: false,
-  graphical: false
+  graphical: false,
 };
 
 export { Switch };

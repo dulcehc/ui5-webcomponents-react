@@ -1,9 +1,13 @@
 import { ValueState } from '@ui5/webcomponents-react/lib/ValueState';
-import { withWebComponent, WithWebComponentPropTypes } from '@ui5/webcomponents-react/lib/withWebComponent';
+import {
+  withWebComponent,
+  WithWebComponentPropTypes,
+} from '@ui5/webcomponents-react/lib/withWebComponent';
 import '@ui5/webcomponents/dist/TextArea';
 import { FC, ReactNode } from 'react';
 
-export interface TextAreaPropTypes extends Omit<WithWebComponentPropTypes, 'onChange' | 'onInput'> {
+export interface TextAreaPropTypes
+  extends Omit<WithWebComponentPropTypes, 'onChange' | 'onInput'> {
   /**
    * Indicates whether the user can interact with the component or not. <br><br> <b>Note:</b> Disabled components cannot be focused and they are out of the tab chain.
    */
@@ -67,11 +71,11 @@ export interface TextAreaPropTypes extends Omit<WithWebComponentPropTypes, 'onCh
   /**
    * Fired when the text has changed and the focus leaves the <code>TextArea</code>.
    */
-  onChange?: (event: CustomEvent<{}>) => void;
+  onChange?: (event: CustomEvent) => void;
   /**
    * Fired when the value of the <code>TextArea</code> changes at each keystroke or when something is pasted.
    */
-  onInput?: (event: CustomEvent<{}>) => void;
+  onInput?: (event: CustomEvent) => void;
 }
 
 /**
@@ -84,7 +88,15 @@ export interface TextAreaPropTypes extends Omit<WithWebComponentPropTypes, 'onCh
  */
 const TextArea: FC<TextAreaPropTypes> = withWebComponent<TextAreaPropTypes>(
   'ui5-textarea',
-  ['growingMaxLines', 'maxlength', 'name', 'placeholder', 'rows', 'value', 'valueState'],
+  [
+    'growingMaxLines',
+    'maxlength',
+    'name',
+    'placeholder',
+    'rows',
+    'value',
+    'valueState',
+  ],
   ['disabled', 'growing', 'readonly', 'required', 'showExceededText'],
   ['valueStateMessage'],
   ['change', 'input']
@@ -101,7 +113,7 @@ TextArea.defaultProps = {
   required: false,
   rows: 0,
   showExceededText: false,
-  valueState: ValueState.None
+  valueState: ValueState.None,
 };
 
 export { TextArea };

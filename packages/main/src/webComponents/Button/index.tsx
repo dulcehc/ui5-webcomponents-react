@@ -1,9 +1,13 @@
 import { ButtonDesign } from '@ui5/webcomponents-react/lib/ButtonDesign';
-import { withWebComponent, WithWebComponentPropTypes } from '@ui5/webcomponents-react/lib/withWebComponent';
+import {
+  withWebComponent,
+  WithWebComponentPropTypes,
+} from '@ui5/webcomponents-react/lib/withWebComponent';
 import '@ui5/webcomponents/dist/Button';
 import { FC, ReactNode } from 'react';
 
-export interface ButtonPropTypes extends Omit<WithWebComponentPropTypes, 'onClick'> {
+export interface ButtonPropTypes
+  extends Omit<WithWebComponentPropTypes, 'onClick'> {
   /**
    * Defines the <code>Button</code> design. <br><br> <b>Note:</b> Available options are "Default", "Emphasized", "Positive", "Negative", and "Transparent".
    */
@@ -23,6 +27,10 @@ export interface ButtonPropTypes extends Omit<WithWebComponentPropTypes, 'onClic
    */
   iconEnd?: boolean;
   /**
+   * Defines the size of the icon inside the <code>Button</code>.
+   */
+  iconSize?: string;
+  /**
    * When set to <code>true</code>, the <code>Button</code> will automatically submit the nearest form element upon <code>press</code>. <br><br> <b>Important:</b> For the <code>submits</code> property to have effect, you must add the following import to your project: <code>import "@ui5/webcomponents/dist/features/InputElementsFormSupport.js";</code>
    */
   submits?: boolean;
@@ -33,7 +41,7 @@ export interface ButtonPropTypes extends Omit<WithWebComponentPropTypes, 'onClic
   /**
    * Fired when the <code>Button</code> is activated either with a mouse/tap or by using the Enter or Space key. <br><br> <b>Note:</b> The event will not be fired if the <code>disabled</code> property is set to <code>true</code>.
    */
-  onClick?: (event: CustomEvent<{}>) => void;
+  onClick?: (event: CustomEvent) => void;
 }
 
 /**
@@ -44,7 +52,7 @@ export interface ButtonPropTypes extends Omit<WithWebComponentPropTypes, 'onClic
  */
 const Button: FC<ButtonPropTypes> = withWebComponent<ButtonPropTypes>(
   'ui5-button',
-  ['design', 'icon'],
+  ['design', 'icon', 'iconSize'],
   ['disabled', 'iconEnd', 'submits'],
   [],
   ['click']
@@ -56,7 +64,8 @@ Button.defaultProps = {
   design: ButtonDesign.Default,
   disabled: false,
   iconEnd: false,
-  submits: false
+  iconSize: undefined,
+  submits: false,
 };
 
 export { Button };

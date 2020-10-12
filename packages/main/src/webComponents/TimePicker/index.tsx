@@ -1,9 +1,13 @@
 import { ValueState } from '@ui5/webcomponents-react/lib/ValueState';
-import { withWebComponent, WithWebComponentPropTypes } from '@ui5/webcomponents-react/lib/withWebComponent';
+import {
+  withWebComponent,
+  WithWebComponentPropTypes,
+} from '@ui5/webcomponents-react/lib/withWebComponent';
 import '@ui5/webcomponents/dist/TimePicker';
 import { FC, ReactNode } from 'react';
 
-export interface TimePickerPropTypes extends Omit<WithWebComponentPropTypes, 'onChange' | 'onInput'> {
+export interface TimePickerPropTypes
+  extends Omit<WithWebComponentPropTypes, 'onChange' | 'onInput'> {
   /**
    * Determines whether the <code>TimePicker</code> is displayed as disabled.
    */
@@ -41,11 +45,11 @@ export interface TimePickerPropTypes extends Omit<WithWebComponentPropTypes, 'on
   /**
    * Fired when the input operation has finished by clicking the "OK" button or when the text in the input field has changed and the focus leaves the input field.
    */
-  onChange?: (event: CustomEvent<{}>) => void;
+  onChange?: (event: CustomEvent) => void;
   /**
    * Fired when the value of the <code>TimePicker</code> is changed at each key stroke.
    */
-  onInput?: (event: CustomEvent<{}>) => void;
+  onInput?: (event: CustomEvent) => void;
 }
 
 /**
@@ -55,7 +59,9 @@ export interface TimePickerPropTypes extends Omit<WithWebComponentPropTypes, 'on
 
  * <a href="https://sap.github.io/ui5-webcomponents/playground/components/TimePicker" target="_blank">UI5 Web Components Playground</a>
  */
-const TimePicker: FC<TimePickerPropTypes> = withWebComponent<TimePickerPropTypes>(
+const TimePicker: FC<TimePickerPropTypes> = withWebComponent<
+  TimePickerPropTypes
+>(
   'ui5-time-picker',
   ['formatPattern', 'placeholder', 'value', 'valueState'],
   ['disabled', 'readonly'],
@@ -70,7 +76,7 @@ TimePicker.defaultProps = {
   placeholder: undefined,
   readonly: false,
   value: undefined,
-  valueState: ValueState.None
+  valueState: ValueState.None,
 };
 
 export { TimePicker };

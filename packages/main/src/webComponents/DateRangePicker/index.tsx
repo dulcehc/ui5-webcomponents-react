@@ -1,10 +1,14 @@
 import { CalendarType } from '@ui5/webcomponents-react/lib/CalendarType';
 import { ValueState } from '@ui5/webcomponents-react/lib/ValueState';
-import { withWebComponent, WithWebComponentPropTypes } from '@ui5/webcomponents-react/lib/withWebComponent';
+import {
+  withWebComponent,
+  WithWebComponentPropTypes,
+} from '@ui5/webcomponents-react/lib/withWebComponent';
 import '@ui5/webcomponents/dist/DateRangePicker';
 import { FC, ReactNode } from 'react';
 
-export interface DateRangePickerPropTypes extends Omit<WithWebComponentPropTypes, 'onChange' | 'onInput'> {
+export interface DateRangePickerPropTypes
+  extends Omit<WithWebComponentPropTypes, 'onChange' | 'onInput'> {
   /**
    * Determines the symbol which separates the dates.
    */
@@ -54,6 +58,10 @@ export interface DateRangePickerPropTypes extends Omit<WithWebComponentPropTypes
    */
   readonly?: boolean;
   /**
+   * Defines whether the <code>ui5-datepicker</code> is required.
+   */
+  required?: boolean;
+  /**
    * Defines a formatted date value.
    */
   value?: string;
@@ -70,11 +78,11 @@ export interface DateRangePickerPropTypes extends Omit<WithWebComponentPropTypes
   /**
    * Fired when the input operation has finished by pressing Enter or on focusout.
    */
-  onChange?: (event: CustomEvent<{}>) => void;
+  onChange?: (event: CustomEvent) => void;
   /**
    * Fired when the value of the <code>DatePicker</code> is changed at each key stroke.
    */
-  onInput?: (event: CustomEvent<{}>) => void;
+  onInput?: (event: CustomEvent) => void;
 }
 
 /**
@@ -83,7 +91,9 @@ export interface DateRangePickerPropTypes extends Omit<WithWebComponentPropTypes
 
  * <a href="https://sap.github.io/ui5-webcomponents/playground/components/DateRangePicker" target="_blank">UI5 Web Components Playground</a>
  */
-const DateRangePicker: FC<DateRangePickerPropTypes> = withWebComponent<DateRangePickerPropTypes>(
+const DateRangePicker: FC<DateRangePickerPropTypes> = withWebComponent<
+  DateRangePickerPropTypes
+>(
   'ui5-daterange-picker',
   [
     'delimiter',
@@ -94,9 +104,9 @@ const DateRangePicker: FC<DateRangePickerPropTypes> = withWebComponent<DateRange
     'placeholder',
     'primaryCalendarType',
     'value',
-    'valueState'
+    'valueState',
   ],
-  ['disabled', 'hideWeekNumbers', 'readonly'],
+  ['disabled', 'hideWeekNumbers', 'readonly', 'required'],
   ['valueStateMessage'],
   ['change', 'input']
 );
@@ -110,7 +120,8 @@ DateRangePicker.defaultProps = {
   placeholder: undefined,
   primaryCalendarType: CalendarType.Gregorian,
   readonly: false,
-  valueState: ValueState.None
+  required: false,
+  valueState: ValueState.None,
 };
 
 export { DateRangePicker };

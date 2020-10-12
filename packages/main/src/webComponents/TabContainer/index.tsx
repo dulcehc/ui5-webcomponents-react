@@ -1,6 +1,9 @@
 import { TabContainerTabsPlacement } from '@ui5/webcomponents-react/lib/TabContainerTabsPlacement';
 import { TabLayout } from '@ui5/webcomponents-react/lib/TabLayout';
-import { withWebComponent, WithWebComponentPropTypes } from '@ui5/webcomponents-react/lib/withWebComponent';
+import {
+  withWebComponent,
+  WithWebComponentPropTypes,
+} from '@ui5/webcomponents-react/lib/withWebComponent';
 import '@ui5/webcomponents/dist/TabContainer';
 import { FC, ReactNode } from 'react';
 
@@ -34,9 +37,15 @@ export interface TabContainerPropTypes extends WithWebComponentPropTypes {
    */
   children?: ReactNode | ReactNode[];
   /**
+   * Defines the button which will open the overflow menu. If nothing is provided to this slot, the default button will be used.
+   */
+  overflowButton?: ReactNode | ReactNode[];
+  /**
    * Fired when a tab is selected.
    */
-  onTabSelect?: (event: CustomEvent<{ tab: ReactNode; tabIndex: number }>) => void;
+  onTabSelect?: (
+    event: CustomEvent<{ tab: ReactNode; tabIndex: number }>
+  ) => void;
 }
 
 /**
@@ -46,11 +55,13 @@ export interface TabContainerPropTypes extends WithWebComponentPropTypes {
 
  * <a href="https://sap.github.io/ui5-webcomponents/playground/components/TabContainer" target="_blank">UI5 Web Components Playground</a>
  */
-const TabContainer: FC<TabContainerPropTypes> = withWebComponent<TabContainerPropTypes>(
+const TabContainer: FC<TabContainerPropTypes> = withWebComponent<
+  TabContainerPropTypes
+>(
   'ui5-tabcontainer',
   ['tabLayout', 'tabsPlacement'],
   ['collapsed', 'fixed', 'showOverflow'],
-  [],
+  ['overflowButton'],
   ['tab-select']
 );
 
@@ -61,7 +72,7 @@ TabContainer.defaultProps = {
   fixed: false,
   showOverflow: false,
   tabLayout: TabLayout.Standard,
-  tabsPlacement: TabContainerTabsPlacement.Top
+  tabsPlacement: TabContainerTabsPlacement.Top,
 };
 
 export { TabContainer };

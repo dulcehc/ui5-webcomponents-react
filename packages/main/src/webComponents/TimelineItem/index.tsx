@@ -1,4 +1,7 @@
-import { withWebComponent, WithWebComponentPropTypes } from '@ui5/webcomponents-react/lib/withWebComponent';
+import {
+  withWebComponent,
+  WithWebComponentPropTypes,
+} from '@ui5/webcomponents-react/lib/withWebComponent';
 import '@ui5/webcomponents/dist/TimelineItem';
 import { FC, ReactNode } from 'react';
 
@@ -32,7 +35,7 @@ export interface TimelineItemPropTypes extends WithWebComponentPropTypes {
   /**
    * Fired when the item name is pressed either with a click/tap or by using the Enter or Space key. <br><br> <b>Note:</b> The event will not be fired if the <code>item-name-clickable</code> attribute is not set.
    */
-  onItemNameClick?: (event: CustomEvent<{}>) => void;
+  onItemNameClick?: (event: CustomEvent) => void;
 }
 
 /**
@@ -40,7 +43,9 @@ export interface TimelineItemPropTypes extends WithWebComponentPropTypes {
 
  * <a href="https://sap.github.io/ui5-webcomponents/playground/components/TimelineItem" target="_blank">UI5 Web Components Playground</a>
  */
-const TimelineItem: FC<TimelineItemPropTypes> = withWebComponent<TimelineItemPropTypes>(
+const TimelineItem: FC<TimelineItemPropTypes> = withWebComponent<
+  TimelineItemPropTypes
+>(
   'ui5-timeline-item',
   ['icon', 'itemName', 'subtitleText', 'titleText'],
   ['itemNameClickable'],
@@ -51,7 +56,7 @@ const TimelineItem: FC<TimelineItemPropTypes> = withWebComponent<TimelineItemPro
 TimelineItem.displayName = 'TimelineItem';
 
 TimelineItem.defaultProps = {
-  itemNameClickable: false
+  itemNameClickable: false,
 };
 
 export { TimelineItem };

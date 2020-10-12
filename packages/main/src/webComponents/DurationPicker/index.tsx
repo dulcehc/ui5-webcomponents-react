@@ -1,8 +1,12 @@
-import { withWebComponent, WithWebComponentPropTypes } from '@ui5/webcomponents-react/lib/withWebComponent';
+import {
+  withWebComponent,
+  WithWebComponentPropTypes,
+} from '@ui5/webcomponents-react/lib/withWebComponent';
 import '@ui5/webcomponents/dist/DurationPicker';
-import { FC } from 'react';
+import { FC, ReactNode } from 'react';
 
-export interface DurationPickerPropTypes extends Omit<WithWebComponentPropTypes, 'onChange'> {
+export interface DurationPickerPropTypes
+  extends Omit<WithWebComponentPropTypes, 'onChange'> {
   /**
    * Determines whether the <code>DurationPicker</code> is displayed as disabled.
    */
@@ -46,9 +50,15 @@ export interface DurationPickerPropTypes extends Omit<WithWebComponentPropTypes,
    */
   valueState?: string;
   /**
+   * Defines the value state message that will be displayed as pop up under the <code>DurationPicker</code>. <br><br><br/><br/>
+   *
+   * <b>Note:</b> If not specified, a default text (in the respective language) will be displayed. <br> <b>Note:</b> The <code>valueStateMessage</code> would be displayed, when the <code>DurationPicker</code> is in <code>Information</code>, <code>Warning</code> or <code>Error</code> value state.
+   */
+  valueStateMessage?: ReactNode;
+  /**
    * Fired when the input operation has finished by pressing Enter or on focusout.
    */
-  onChange?: (event: CustomEvent<{}>) => void;
+  onChange?: (event: CustomEvent) => void;
 }
 
 /**
@@ -58,11 +68,13 @@ export interface DurationPickerPropTypes extends Omit<WithWebComponentPropTypes,
 
  * <a href="https://sap.github.io/ui5-webcomponents/playground/components/DurationPicker" target="_blank">UI5 Web Components Playground</a>
  */
-const DurationPicker: FC<DurationPickerPropTypes> = withWebComponent<DurationPickerPropTypes>(
+const DurationPicker: FC<DurationPickerPropTypes> = withWebComponent<
+  DurationPickerPropTypes
+>(
   'ui5-duration-picker',
   ['maxValue', 'minutesStep', 'secondsStep', 'value', 'valueState'],
   ['disabled', 'hideHours', 'hideMinutes', 'hideSeconds', 'readonly'],
-  [],
+  ['valueStateMessage'],
   ['change']
 );
 
@@ -78,7 +90,7 @@ DurationPicker.defaultProps = {
   readonly: false,
   secondsStep: 1,
   value: '00:00:00',
-  valueState: 'None'
+  valueState: 'None',
 };
 
 export { DurationPicker };

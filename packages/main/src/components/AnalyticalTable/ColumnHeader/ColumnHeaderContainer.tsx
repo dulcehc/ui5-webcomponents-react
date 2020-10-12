@@ -17,9 +17,9 @@ const styles = {
     cursor: 'col-resize',
     willChange: 'transform',
     '&:hover, &:active': {
-      backgroundColor: ThemingParameters.sapContent_DragAndDropActiveColor
-    }
-  }
+      backgroundColor: ThemingParameters.sapContent_DragAndDropActiveColor,
+    },
+  },
 };
 
 const useStyles = createUseStyles(styles);
@@ -40,7 +40,7 @@ export const ColumnHeaderContainer = (props) => {
     visibleColumnsWidth,
     overscanCountHorizontal,
     resizeInfo,
-    reactWindowRef
+    reactWindowRef,
   } = props;
   const columnVirtualizer = useVirtual({
     size: visibleColumnsWidth.length,
@@ -52,22 +52,31 @@ export const ColumnHeaderContainer = (props) => {
       [visibleColumnsWidth]
     ),
     horizontal: true,
-    overscan: overscanCountHorizontal
+    overscan: overscanCountHorizontal,
   });
 
   reactWindowRef.current = {
     ...reactWindowRef.current,
     horizontalScrollToOffset: columnVirtualizer.scrollToOffset,
-    horizontalScrollToIndex: columnVirtualizer.scrollToIndex
+    horizontalScrollToIndex: columnVirtualizer.scrollToIndex,
   };
 
   const classes = useStyles();
 
   return (
-    <div {...headerProps} role="rowgroup" style={{ width: `${columnVirtualizer.totalSize}px` }}>
+    <div
+      {...headerProps}
+      role="rowgroup"
+      style={{ width: `${columnVirtualizer.totalSize}px` }}
+    >
       {columnVirtualizer.virtualItems.map((virtualColumn: VirtualItem) => {
         const column = headerGroup.headers[virtualColumn.index];
-        const isLastColumn = !column.disableResizing && virtualColumn.index + 1 === headerGroup.headers.length;
+        if (!column) {
+          return null;
+        }
+        const isLastColumn =
+          !column.disableResizing &&
+          virtualColumn.index + 1 === headerGroup.headers.length;
         return (
           <>
             {column.canResize && column.getResizerProps && (
@@ -75,7 +84,13 @@ export const ColumnHeaderContainer = (props) => {
                 {...column.getResizerProps()}
                 data-resizer
                 className={classes.resizer}
-                style={{ left: `${column.totalFlexWidth + column.totalLeft - (isLastColumn ? 3 : 0)}px` }}
+                style={{
+                  left: `${
+                    column.totalFlexWidth +
+                    column.totalLeft -
+                    (isLastColumn ? 3 : 0)
+                  }px`,
+                }}
               />
             )}
             <ColumnHeader
@@ -88,6 +103,7 @@ export const ColumnHeaderContainer = (props) => {
               onDragEnter={onDragEnter}
               onDragEnd={onDragEnd}
               dragOver={column.id === dragOver}
+              headerTooltip={column.headerTooltip}
               isDraggable={column.canReorder && !resizeInfo.isResizingColumn}
               virtualColumn={virtualColumn}
             >

@@ -1,19 +1,19 @@
-import { Meta, Story, Canvas, ArgsTable } from '@storybook/addon-docs/blocks';
-import { AnalyticalTable } from '@ui5/webcomponents-react/lib/AnalyticalTable';
-import { createSelectArgTypes } from '../../../../../shared/stories/createSelectArgTypes';
-import { TableScaleWidthMode } from '@ui5/webcomponents-react/lib/TableScaleWidthMode';
-import { TableSelectionBehavior } from '@ui5/webcomponents-react/lib/TableSelectionBehavior';
-import { TableSelectionMode } from '@ui5/webcomponents-react/lib/TableSelectionMode';
-import generateData from './demo/generateData';
-import { DocsHeader } from '@shared/stories/DocsHeader';
-import '@ui5/webcomponents-icons/dist/icons/delete';
-import '@ui5/webcomponents-icons/dist/icons/edit';
-import '@ui5/webcomponents-icons/dist/icons/settings';
-import { Button } from '@ui5/webcomponents-react/lib/Button';
-import { FlexBox } from '@ui5/webcomponents-react/lib/FlexBox';
-import { TextAlign } from '@ui5/webcomponents-react/lib/TextAlign';
-import { DefaultLoadingComponent } from './defaults/LoadingComponent';
-import { DefaultNoDataComponent } from './defaults/NoDataComponent';
+import { Meta, Story, Canvas, ArgsTable } from "@storybook/addon-docs/blocks";
+import { AnalyticalTable } from "@ui5/webcomponents-react/lib/AnalyticalTable";
+import { createSelectArgTypes } from "../../../../../shared/stories/createSelectArgTypes";
+import { TableScaleWidthMode } from "@ui5/webcomponents-react/lib/TableScaleWidthMode";
+import { TableSelectionBehavior } from "@ui5/webcomponents-react/lib/TableSelectionBehavior";
+import { TableSelectionMode } from "@ui5/webcomponents-react/lib/TableSelectionMode";
+import generateData from "./demo/generateData";
+import { DocsHeader } from "@shared/stories/DocsHeader";
+import "@ui5/webcomponents-icons/dist/icons/delete";
+import "@ui5/webcomponents-icons/dist/icons/edit";
+import "@ui5/webcomponents-icons/dist/icons/settings";
+import { Button } from "@ui5/webcomponents-react/lib/Button";
+import { FlexBox } from "@ui5/webcomponents-react/lib/FlexBox";
+import { TextAlign } from "@ui5/webcomponents-react/lib/TextAlign";
+import { DefaultLoadingComponent } from "./defaults/LoadingComponent";
+import { DefaultNoDataComponent } from "./defaults/NoDataComponent";
 
 <Meta
   title="Components / AnalyticalTable"
@@ -22,31 +22,32 @@ import { DefaultNoDataComponent } from './defaults/NoDataComponent';
     data: generateData(1000),
     columns: [
       {
-        Header: 'Name',
-        accessor: 'name' // String-based value accessors!
+        Header: "Name",
+        headerTooltip: "Full Name", // A more extensive description!
+        accessor: "name", // String-based value accessors!
       },
       {
-        Header: 'Age',
-        accessor: 'age',
+        Header: "Age",
+        accessor: "age",
         hAlign: TextAlign.End,
         disableGroupBy: true,
         disableSortBy: false,
         disableFilters: false,
-        className: 'superCustomClass'
+        className: "superCustomClass",
       },
       {
-        Header: 'Friend Name',
-        accessor: 'friend.name'
+        Header: "Friend Name",
+        accessor: "friend.name",
       },
       {
         Header: () => <span>Friend Age</span>,
-        accessor: 'friend.age',
+        accessor: "friend.age",
         hAlign: TextAlign.End,
         filter: (rows, accessor, filterValue) => {
-          if (filterValue === 'all') {
+          if (filterValue === "all") {
             return rows;
           }
-          if (filterValue === 'true') {
+          if (filterValue === "true") {
             return rows.filter((row) => row.values[accessor] >= 21);
           }
           return rows.filter((row) => row.values[accessor] < 21);
@@ -55,20 +56,20 @@ import { DefaultNoDataComponent } from './defaults/NoDataComponent';
           return (
             <select
               onChange={(event) => column.setFilter(event.target.value)}
-              style={{ width: '100%' }}
-              value={column.filterValue ? column.filterValue : 'all'}
+              style={{ width: "100%" }}
+              value={column.filterValue ? column.filterValue : "all"}
             >
               <option value="all">Show All</option>
               <option value="true">Can Drink</option>
               <option value="false">Can't Drink</option>
             </select>
           );
-        }
+        },
       },
       {
-        id: 'actions',
-        Header: 'Actions',
-        accessor: '.',
+        id: "actions",
+        Header: "Actions",
+        accessor: ".",
         width: 100,
         canResize: false,
         Cell: ({ cell, row }) => {
@@ -79,10 +80,10 @@ import { DefaultNoDataComponent } from './defaults/NoDataComponent';
               <Button icon="delete" />
             </FlexBox>
           );
-        }
-      }
+        },
+      },
     ],
-    title: 'Table Title',
+    title: "Table Title",
     sortable: true,
     filterable: true,
     visibleRows: 15,
@@ -92,17 +93,17 @@ import { DefaultNoDataComponent } from './defaults/NoDataComponent';
     rowHeight: 44,
     selectedRowIds: { 3: true },
     withRowHighlight: true,
-    highlightField: 'status',
+    highlightField: "status",
     infiniteScroll: true,
     infiniteScrollThreshold: 20,
-    subRowsKey: 'subRows',
+    subRowsKey: "subRows",
     isTreeTable: false,
     NoDataComponent: DefaultNoDataComponent,
     LoadingComponent: DefaultLoadingComponent,
     scaleWidthMode: TableScaleWidthMode.Default,
     selectionMode: TableSelectionMode.SINGLE_SELECT,
     selectionBehavior: TableSelectionBehavior.ROW,
-    overscanCountHorizontal: 5
+    overscanCountHorizontal: 5,
   }}
   argTypes={{
     ref: { type: null },
@@ -115,8 +116,8 @@ import { DefaultNoDataComponent } from './defaults/NoDataComponent';
     ...createSelectArgTypes({
       scaleWidthMode: TableScaleWidthMode,
       selectionMode: TableSelectionMode,
-      selectionBehavior: TableSelectionBehavior
-    })
+      selectionBehavior: TableSelectionBehavior,
+    }),
   }}
 />
 
@@ -125,7 +126,7 @@ import { DefaultNoDataComponent } from './defaults/NoDataComponent';
 <Canvas>
   <Story name="Default">
     {(args) => (
-      <div style={{ display: 'flex', flexDirection: 'column' }}>
+      <div style={{ display: "flex", flexDirection: "column" }}>
         <AnalyticalTable
           {...args}
           title={args.title}
@@ -177,6 +178,7 @@ import { DefaultNoDataComponent } from './defaults/NoDataComponent';
 | Attribute          | Type                                                                     | Description                                                                                                                                                                                                                                                                                                                                                                                                     |
 | ------------------ | ------------------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `Header`           | `string OR ComponentType`                                                | Can either be `string` or a React component that will be rendered as column header                                                                                                                                                                                                                                                                                                                              |
+| `headerTooltip`    | `string`                                                                 | Tooltip for the column header. If not set, the display text will be the same as the Header if it is a `string`                                                                                                                                                                                                                                                                                                  |
 | `Cell`             | `ComponentType`                                                          | Custom cell renderer. If set, the table will call that component for every cell and pass all required information as props, e.g. the cell value as `props.cell.value`                                                                                                                                                                                                                                           |
 | `width`            | `number`                                                                 | Cell width, if not set the table will distribute all columns without a width evenly                                                                                                                                                                                                                                                                                                                             |
 | `minWidth`         | `number`                                                                 | min width of the column, e.g. used for resizing                                                                                                                                                                                                                                                                                                                                                                 |

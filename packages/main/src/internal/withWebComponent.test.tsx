@@ -1,13 +1,19 @@
 import { render, fireEvent, screen } from '@shared/tests';
 import { Button } from '@ui5/webcomponents-react/lib/Button';
 import { Dialog } from '@ui5/webcomponents-react/lib/Dialog';
+import {
+  setCustomElementsScopingSuffix,
+  setCustomElementsScopingRules,
+} from '@ui5/webcomponents-base/dist/CustomElementsScope';
 import React from 'react';
 
 describe('withWebComponent', () => {
   test('Unmount Event Handlers correctly after prop update', () => {
     const callback = jest.fn();
 
-    const { rerender, unmount } = render(<Button onClick={callback}>Click Me</Button>);
+    const { rerender, unmount } = render(
+      <Button onClick={callback}>Click Me</Button>
+    );
     fireEvent.click(screen.getByText('Click Me'));
     expect(callback).toHaveBeenCalledTimes(1);
 
@@ -33,7 +39,11 @@ describe('withWebComponent', () => {
     const callbackFooter2 = jest.fn();
 
     const { rerender } = render(
-      <Dialog footer={<Button onClick={callbackFooter1}>Footer Button 1</Button>}>My Dialog Content</Dialog>
+      <Dialog
+        footer={<Button onClick={callbackFooter1}>Footer Button 1</Button>}
+      >
+        My Dialog Content
+      </Dialog>
     );
 
     fireEvent.click(screen.getByText('Footer Button 1'));
@@ -66,5 +76,19 @@ describe('withWebComponent', () => {
 
     rerender(<Button>Click Me</Button>);
     expect(screen.getByText('Click Me')).not.toHaveAttribute('disabled');
+  });
+
+  test('scoping', () => {
+    setCustomElementsScopingSuffix('ui5-wcr');
+    const { asFragment, rerender } = render(<Button>Scoping Test</Button>);
+    expect(asFragment()).toMatchSnapshot();
+
+    // now exclude the button
+    setCustomElementsScopingRules({
+      include: [/^ui5-/],
+      exclude: [/^ui5-button/],
+    });
+    rerender(<Button>Scoping Test</Button>);
+    expect(asFragment()).toMatchSnapshot();
   });
 });

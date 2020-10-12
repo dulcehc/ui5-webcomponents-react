@@ -11,6 +11,7 @@ export interface AnalyticalTableColumnDefinition {
   id?: string;
 
   Header?: string | ComponentType<any>;
+  headerTooltip?: string;
   Cell?: string | ComponentType<any>;
   width?: number;
   minWidth?: number;
@@ -33,7 +34,9 @@ export interface AnalyticalTableColumnDefinition {
   disableSortBy?: boolean;
   sortDescFirst?: boolean;
   sortInverted?: boolean;
-  sortType?: string | ((rowA, rowB, columnId: string, descending: boolean) => any);
+  sortType?:
+    | string
+    | ((rowA, rowB, columnId: string, descending: boolean) => any);
 
   // useResizeColumns
   disableResizing?: boolean;

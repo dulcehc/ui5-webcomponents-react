@@ -1,5 +1,8 @@
 import { CarouselArrowsPlacement } from '@ui5/webcomponents-react/lib/CarouselArrowsPlacement';
-import { withWebComponent, WithWebComponentPropTypes } from '@ui5/webcomponents-react/lib/withWebComponent';
+import {
+  withWebComponent,
+  WithWebComponentPropTypes,
+} from '@ui5/webcomponents-react/lib/withWebComponent';
 import '@ui5/webcomponents/dist/Carousel';
 import { FC, ReactNode } from 'react';
 
@@ -43,7 +46,7 @@ export interface CarouselPropTypes extends WithWebComponentPropTypes {
   /**
    * Fired for the last items of the <code>Carousel</code> if it is scrolled and the direction of scrolling is to the end. The number of items for which the event is thrown is controlled by the <code>infiniteScrollOffset</code> property.
    */
-  onLoadMore?: (event: CustomEvent<{}>) => void;
+  onLoadMore?: (event: CustomEvent) => void;
   /**
    * Fired whenever the <code>selectedIndex</code> changes due to user interaction, when the user clicks on the navigation arrows or while resizing, based on the <code>items-per-page-l</code>, <code>items-per-page-m</code> and <code>items-per-page-s</code> properties.
    */
@@ -58,7 +61,14 @@ export interface CarouselPropTypes extends WithWebComponentPropTypes {
  */
 const Carousel: FC<CarouselPropTypes> = withWebComponent<CarouselPropTypes>(
   'ui5-carousel',
-  ['arrowsPlacement', 'infiniteScrollOffset', 'itemsPerPageL', 'itemsPerPageM', 'itemsPerPageS', 'selectedIndex'],
+  [
+    'arrowsPlacement',
+    'infiniteScrollOffset',
+    'itemsPerPageL',
+    'itemsPerPageM',
+    'itemsPerPageS',
+    'selectedIndex',
+  ],
   ['cyclic', 'hideNavigation'],
   [],
   ['load-more', 'navigate']
@@ -74,7 +84,7 @@ Carousel.defaultProps = {
   itemsPerPageL: 1,
   itemsPerPageM: 1,
   itemsPerPageS: 1,
-  selectedIndex: 0
+  selectedIndex: 0,
 };
 
 export { Carousel };

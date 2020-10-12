@@ -1,9 +1,13 @@
 import { ValueState } from '@ui5/webcomponents-react/lib/ValueState';
-import { withWebComponent, WithWebComponentPropTypes } from '@ui5/webcomponents-react/lib/withWebComponent';
+import {
+  withWebComponent,
+  WithWebComponentPropTypes,
+} from '@ui5/webcomponents-react/lib/withWebComponent';
 import '@ui5/webcomponents/dist/FileUploader';
 import { FC, ReactNode } from 'react';
 
-export interface FileUploaderPropTypes extends Omit<WithWebComponentPropTypes, 'onChange'> {
+export interface FileUploaderPropTypes
+  extends Omit<WithWebComponentPropTypes, 'onChange'> {
   /**
    * Comma-separated list of file types that the <code>FileUploader</code> should accept.
    */
@@ -45,6 +49,12 @@ export interface FileUploaderPropTypes extends Omit<WithWebComponentPropTypes, '
    */
   children?: ReactNode | ReactNode[];
   /**
+   * Defines the value state message that will be displayed as pop up under the <code>FileUploader</code>. <br><br><br/><br/>
+   *
+   * <b>Note:</b> If not specified, a default text (in the respective language) will be displayed. <br> <b>Note:</b> The <code>valueStateMessage</code> would be displayed, when the <code>ui5--file-uploader</code> is in <code>Information</code>, <code>Warning</code> or <code>Error</code> value state.
+   */
+  valueStateMessage?: ReactNode | ReactNode[];
+  /**
    * Event is fired when the value of the file path has been changed. <b>Note:</b> Keep in mind that because of the HTML input element of type file, the event is also fired in Chrome browser when the Cancel button of the uploads window is pressed.
    */
   onChange?: (event: CustomEvent<{ files: FileList }>) => void;
@@ -61,11 +71,13 @@ export interface FileUploaderPropTypes extends Omit<WithWebComponentPropTypes, '
 
  * <a href="https://sap.github.io/ui5-webcomponents/playground/components/FileUploader" target="_blank">UI5 Web Components Playground</a>
  */
-const FileUploader: FC<FileUploaderPropTypes> = withWebComponent<FileUploaderPropTypes>(
+const FileUploader: FC<FileUploaderPropTypes> = withWebComponent<
+  FileUploaderPropTypes
+>(
   'ui5-file-uploader',
   ['accept', 'name', 'placeholder', 'value', 'valueState'],
   ['disabled', 'hideInput', 'multiple'],
-  [],
+  ['valueStateMessage'],
   ['change']
 );
 
@@ -75,7 +87,7 @@ FileUploader.defaultProps = {
   disabled: false,
   hideInput: false,
   multiple: false,
-  valueState: ValueState.None
+  valueState: ValueState.None,
 };
 
 export { FileUploader };

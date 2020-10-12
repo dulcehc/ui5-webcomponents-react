@@ -1,9 +1,13 @@
 import '@ui5/webcomponents-fiori/dist/NotificationListItem';
 import { Priority } from '@ui5/webcomponents-react/lib/Priority';
-import { withWebComponent, WithWebComponentPropTypes } from '@ui5/webcomponents-react/lib/withWebComponent';
+import {
+  withWebComponent,
+  WithWebComponentPropTypes,
+} from '@ui5/webcomponents-react/lib/withWebComponent';
 import { FC, ReactNode } from 'react';
 
-export interface NotificationListItemPropTypes extends WithWebComponentPropTypes {
+export interface NotificationListItemPropTypes
+  extends WithWebComponentPropTypes {
   /**
    * Defines if the <code>notification</code> is new or has been already read. <br><br> <b>Note:</b> if set to <code>false</code> the <code>heading</code> has bold font, if set to true - it has a normal font.
    */
@@ -57,14 +61,16 @@ export interface NotificationListItemPropTypes extends WithWebComponentPropTypes
   /**
    * Fired when the <code>Close</code> button is pressed.
    */
-  onClose?: (event: CustomEvent<{}>) => void;
+  onClose?: (event: CustomEvent) => void;
 }
 
 /**
  *
  * <a href="https://sap.github.io/ui5-webcomponents/playground/components/NotificationListItem" target="_blank">UI5 Web Components Playground</a>
  */
-const NotificationListItem: FC<NotificationListItemPropTypes> = withWebComponent<NotificationListItemPropTypes>(
+const NotificationListItem: FC<NotificationListItemPropTypes> = withWebComponent<
+  NotificationListItemPropTypes
+>(
   'ui5-li-notification',
   ['wrap', 'heading', 'priority'],
   ['read', 'busy', 'showClose', 'selected'],
@@ -80,7 +86,7 @@ NotificationListItem.defaultProps = {
   busy: false,
   priority: Priority.None,
   showClose: false,
-  selected: false
+  selected: false,
 };
 
 export { NotificationListItem };

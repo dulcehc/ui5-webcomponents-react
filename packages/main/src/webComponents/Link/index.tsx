@@ -1,9 +1,13 @@
 import { LinkDesign } from '@ui5/webcomponents-react/lib/LinkDesign';
-import { withWebComponent, WithWebComponentPropTypes } from '@ui5/webcomponents-react/lib/withWebComponent';
+import {
+  withWebComponent,
+  WithWebComponentPropTypes,
+} from '@ui5/webcomponents-react/lib/withWebComponent';
 import '@ui5/webcomponents/dist/Link';
 import { FC, ReactNode } from 'react';
 
-export interface LinkPropTypes extends Omit<WithWebComponentPropTypes, 'onClick'> {
+export interface LinkPropTypes
+  extends Omit<WithWebComponentPropTypes, 'onClick'> {
   /**
    * Defines the <code>Link</code> design. <br><br> <b>Note:</b> Avaialble options are <code>Default</code>, <code>Subtle</code>, and <code>Emphasized</code>.
    */
@@ -31,7 +35,7 @@ export interface LinkPropTypes extends Omit<WithWebComponentPropTypes, 'onClick'
   /**
    * Fired when the <code>Link</code> is triggered either with a mouse/tap or by using the Enter key.
    */
-  onClick?: (event: CustomEvent<{}>) => void;
+  onClick?: (event: CustomEvent) => void;
 }
 
 /**
@@ -54,7 +58,7 @@ Link.displayName = 'Link';
 Link.defaultProps = {
   design: LinkDesign.Default,
   disabled: false,
-  wrap: false
+  wrap: false,
 };
 
 export { Link };

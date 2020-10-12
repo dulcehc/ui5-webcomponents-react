@@ -1,9 +1,13 @@
 import { ValueState } from '@ui5/webcomponents-react/lib/ValueState';
-import { withWebComponent, WithWebComponentPropTypes } from '@ui5/webcomponents-react/lib/withWebComponent';
+import {
+  withWebComponent,
+  WithWebComponentPropTypes,
+} from '@ui5/webcomponents-react/lib/withWebComponent';
 import '@ui5/webcomponents/dist/RadioButton';
 import { FC } from 'react';
 
-export interface RadioButtonPropTypes extends Omit<WithWebComponentPropTypes, 'onSelect'> {
+export interface RadioButtonPropTypes
+  extends Omit<WithWebComponentPropTypes, 'onSelect'> {
   /**
    * Determines whether the <code>RadioButton</code> is disabled. <br><br> <b>Note:</b> A disabled <code>RadioButton</code> is completely noninteractive.
    */
@@ -47,11 +51,11 @@ export interface RadioButtonPropTypes extends Omit<WithWebComponentPropTypes, 'o
   /**
    * Fired when the <code>RadioButton</code> selected state changes.
    */
-  onSelect?: (event: CustomEvent<{}>) => void;
+  onSelect?: (event: CustomEvent) => void;
 }
 
 /**
- * The <code>ui5-radibutton</code> component enables users to select a single option from a set of options. When a
+ * The <code>RadioButton</code> component enables users to select a single option from a set of options. When a
  <code>RadioButton</code> is selected by the user, the <code>select</code> event is fired. When a
  <code>RadioButton</code> that is within a group is selected, the one that was previously selected gets automatically
  deselected. You can group radio buttons by using the <code>name</code> property. <br />
@@ -60,7 +64,9 @@ export interface RadioButtonPropTypes extends Omit<WithWebComponentPropTypes, 'o
 
  * <a href="https://sap.github.io/ui5-webcomponents/playground/components/RadioButton" target="_blank">UI5 Web Components Playground</a>
  */
-const RadioButton: FC<RadioButtonPropTypes> = withWebComponent<RadioButtonPropTypes>(
+const RadioButton: FC<RadioButtonPropTypes> = withWebComponent<
+  RadioButtonPropTypes
+>(
   'ui5-radiobutton',
   ['name', 'text', 'value', 'valueState'],
   ['disabled', 'readonly', 'selected', 'wrap'],
@@ -75,7 +81,7 @@ RadioButton.defaultProps = {
   readonly: false,
   selected: false,
   valueState: ValueState.None,
-  wrap: false
+  wrap: false,
 };
 
 export { RadioButton };

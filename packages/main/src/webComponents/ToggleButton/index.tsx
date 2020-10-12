@@ -1,9 +1,13 @@
 import { ButtonDesign } from '@ui5/webcomponents-react/lib/ButtonDesign';
-import { withWebComponent, WithWebComponentPropTypes } from '@ui5/webcomponents-react/lib/withWebComponent';
+import {
+  withWebComponent,
+  WithWebComponentPropTypes,
+} from '@ui5/webcomponents-react/lib/withWebComponent';
 import '@ui5/webcomponents/dist/ToggleButton';
 import { FC, ReactNode } from 'react';
 
-export interface ToggleButtonPropTypes extends Omit<WithWebComponentPropTypes, 'onClick'> {
+export interface ToggleButtonPropTypes
+  extends Omit<WithWebComponentPropTypes, 'onClick'> {
   /**
    * Determines whether the <code>ToggleButton</code> is displayed as pressed.
    */
@@ -17,7 +21,9 @@ export interface ToggleButtonPropTypes extends Omit<WithWebComponentPropTypes, '
    */
   disabled?: boolean;
   /**
-   * Defines the icon to be displayed as graphical element within the <code>Button</code>. The SAP-icons font provides numerous options. <br><br> Example: <br> <pre>ui5-button icon="palette"</pre><br/><br/>
+   * Defines the icon to be displayed as graphical element within the <code>Button</code>. The SAP-icons font provides numerous options.
+   *
+   * <b>Note:</b> You should import the desired icon first, then use its name as "icon".<br><code>import "@ui5/webcomponents-icons/dist/icons/{icon_name}.js"</code>
    *
    * See all the available icons in the <ui5-link target="_blank" href="https://openui5.hana.ondemand.com/test-resources/sap/m/demokit/iconExplorer/webapp/index.html" class="api-table-content-cell-link">Icon Explorer</ui5-link>.
    */
@@ -26,6 +32,10 @@ export interface ToggleButtonPropTypes extends Omit<WithWebComponentPropTypes, '
    * Defines whether the icon should be displayed after the <code>Button</code> text.
    */
   iconEnd?: boolean;
+  /**
+   * Defines the size of the icon inside the <code>Button</code>.
+   */
+  iconSize?: string;
   /**
    * When set to <code>true</code>, the <code>Button</code> will automatically submit the nearest form element upon <code>press</code>. <br><br> <b>Important:</b> For the <code>submits</code> property to have effect, you must add the following import to your project: <code>import "@ui5/webcomponents/dist/features/InputElementsFormSupport.js";</code>
    */
@@ -37,7 +47,7 @@ export interface ToggleButtonPropTypes extends Omit<WithWebComponentPropTypes, '
   /**
    * Fired when the <code>Button</code> is activated either with a mouse/tap or by using the Enter or Space key. <br><br> <b>Note:</b> The event will not be fired if the <code>disabled</code> property is set to <code>true</code>.
    */
-  onClick?: (event: CustomEvent<{}>) => void;
+  onClick?: (event: CustomEvent) => void;
 }
 
 /**
@@ -50,9 +60,11 @@ export interface ToggleButtonPropTypes extends Omit<WithWebComponentPropTypes, '
 
  * <a href="https://sap.github.io/ui5-webcomponents/playground/components/ToggleButton" target="_blank">UI5 Web Components Playground</a>
  */
-const ToggleButton: FC<ToggleButtonPropTypes> = withWebComponent<ToggleButtonPropTypes>(
+const ToggleButton: FC<ToggleButtonPropTypes> = withWebComponent<
+  ToggleButtonPropTypes
+>(
   'ui5-togglebutton',
-  ['design', 'icon'],
+  ['design', 'icon', 'iconSize'],
   ['pressed', 'disabled', 'iconEnd', 'submits'],
   [],
   ['click']
@@ -65,7 +77,8 @@ ToggleButton.defaultProps = {
   design: ButtonDesign.Default,
   disabled: false,
   iconEnd: false,
-  submits: false
+  iconSize: undefined,
+  submits: false,
 };
 
 export { ToggleButton };

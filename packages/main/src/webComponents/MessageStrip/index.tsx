@@ -1,5 +1,8 @@
 import { MessageStripType } from '@ui5/webcomponents-react/lib/MessageStripType';
-import { withWebComponent, WithWebComponentPropTypes } from '@ui5/webcomponents-react/lib/withWebComponent';
+import {
+  withWebComponent,
+  WithWebComponentPropTypes,
+} from '@ui5/webcomponents-react/lib/withWebComponent';
 import '@ui5/webcomponents/dist/MessageStrip';
 import { FC, ReactNode } from 'react';
 
@@ -29,7 +32,7 @@ export interface MessageStripPropTypes extends WithWebComponentPropTypes {
   /**
    * Fired when the close button is pressed either with a click/tap or by using the Enter or Space key.
    */
-  onClose?: (event: CustomEvent<{}>) => void;
+  onClose?: (event: CustomEvent) => void;
 }
 
 /**
@@ -39,7 +42,9 @@ export interface MessageStripPropTypes extends WithWebComponentPropTypes {
 
  * <a href="https://sap.github.io/ui5-webcomponents/playground/components/MessageStrip" target="_blank">UI5 Web Components Playground</a>
  */
-const MessageStrip: FC<MessageStripPropTypes> = withWebComponent<MessageStripPropTypes>(
+const MessageStrip: FC<MessageStripPropTypes> = withWebComponent<
+  MessageStripPropTypes
+>(
   'ui5-messagestrip',
   ['type'],
   ['noCloseButton', 'noIcon'],
@@ -52,7 +57,7 @@ MessageStrip.displayName = 'MessageStrip';
 MessageStrip.defaultProps = {
   noCloseButton: false,
   noIcon: false,
-  type: MessageStripType.Information
+  type: MessageStripType.Information,
 };
 
 export { MessageStrip };

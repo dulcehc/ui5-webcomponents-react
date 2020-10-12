@@ -15,7 +15,7 @@ import React, {
   ReactNodeArray,
   useCallback,
   useMemo,
-  useRef
+  useRef,
 } from 'react';
 import { VirtualItem } from 'react-virtual';
 import { Ui5PopoverDomRef } from '../../../interfaces/Ui5PopoverDomRef';
@@ -39,6 +39,7 @@ export interface ColumnHeaderProps {
   onDragEnd: DragEventHandler<HTMLDivElement>;
   dragOver: boolean;
   isResizing: boolean;
+  headerTooltip: string;
   isDraggable: boolean;
   role: string;
   isLastColumn: boolean;
@@ -67,26 +68,28 @@ const styles = {
     boxSizing: 'border-box',
     '&[data-h-align="End"]': {
       '& $text': {
-        textAlign: 'end'
-      }
-    }
+        textAlign: 'end',
+      },
+    },
   },
   text: {
     width: '100%',
-    textAlign: 'start'
+    textAlign: 'start',
   },
   iconContainer: {
     display: 'inline-block',
     position: 'absolute',
     color: ThemingParameters.sapContent_IconColor,
     right: getRTL() === false ? '0.5rem' : undefined,
-    left: getRTL() === true ? '0.5rem' : undefined
-  }
+    left: getRTL() === true ? '0.5rem' : undefined,
+  },
 };
 
 const useStyles = createComponentStyles(styles, { name: 'TableColumnHeader' });
 
-export const ColumnHeader: FC<ColumnHeaderProps> = (props: ColumnHeaderProps) => {
+export const ColumnHeader: FC<ColumnHeaderProps> = (
+  props: ColumnHeaderProps
+) => {
   const classes = useStyles(props);
 
   const {
@@ -102,13 +105,24 @@ export const ColumnHeader: FC<ColumnHeaderProps> = (props: ColumnHeaderProps) =>
     onDragStart,
     onDrop,
     onDragEnd,
+    headerTooltip,
     isDraggable,
     dragOver,
     role,
-    virtualColumn
+    virtualColumn,
   } = props;
 
   const isFiltered = column.filterValue && column.filterValue.length > 0;
+
+  const tooltip = useMemo(() => {
+    if (headerTooltip) {
+      return headerTooltip;
+    }
+    if (typeof children === 'string') {
+      return children;
+    }
+    return null;
+  }, [children, headerTooltip]);
 
   const textStyle = useMemo(() => {
     let margin = 0;
@@ -125,11 +139,11 @@ export const ColumnHeader: FC<ColumnHeaderProps> = (props: ColumnHeaderProps) =>
 
     if (getRTL()) {
       return {
-        marginLeft: `${margin}rem`
+        marginLeft: `${margin}rem`,
       };
     }
     return {
-      marginRight: `${margin}rem`
+      marginRight: `${margin}rem`,
     };
   }, [column.isSorted, column.isGrouped, isFiltered]);
 
@@ -154,7 +168,7 @@ export const ColumnHeader: FC<ColumnHeaderProps> = (props: ColumnHeaderProps) =>
         top: 0,
         left: 0,
         width: `${virtualColumn.size}px`,
-        transform: `translateX(${virtualColumn.start}px)`
+        transform: `translateX(${virtualColumn.start}px)`,
       }}
     >
       <div
@@ -163,7 +177,9 @@ export const ColumnHeader: FC<ColumnHeaderProps> = (props: ColumnHeaderProps) =>
         style={{
           ...style,
           cursor: hasPopover ? 'pointer' : 'auto',
-          borderLeft: dragOver ? `3px solid ${ThemingParameters.sapSelectedColor}` : undefined
+          borderLeft: dragOver
+            ? `3px solid ${ThemingParameters.sapSelectedColor}`
+            : undefined,
         }}
         role={role}
         draggable={isDraggable}
@@ -177,7 +193,7 @@ export const ColumnHeader: FC<ColumnHeaderProps> = (props: ColumnHeaderProps) =>
       >
         <div className={classes.header} data-h-align={column.hAlign}>
           <Text
-            tooltip={typeof children === 'string' ? children : null}
+            tooltip={tooltip}
             wrapping={false}
             style={textStyle}
             className={classes.text}
@@ -186,11 +202,24 @@ export const ColumnHeader: FC<ColumnHeaderProps> = (props: ColumnHeaderProps) =>
           </Text>
           <div className={classes.iconContainer}>
             {isFiltered && <Icon name="filter" />}
-            {column.isSorted && <Icon name={column.isSortedDesc ? 'sort-descending' : 'sort-ascending'} />}
+            {column.isSorted && (
+              <Icon
+                name={
+                  column.isSortedDesc ? 'sort-descending' : 'sort-ascending'
+                }
+              />
+            )}
             {column.isGrouped && <Icon name="group-2" />}
           </div>
         </div>
-        {hasPopover && <ColumnHeaderModal column={column} onSort={onSort} onGroupBy={onGroupBy} ref={popoverRef} />}
+        {hasPopover && (
+          <ColumnHeaderModal
+            column={column}
+            onSort={onSort}
+            onGroupBy={onGroupBy}
+            ref={popoverRef}
+          />
+        )}
       </div>
     </div>
   );

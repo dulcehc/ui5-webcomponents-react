@@ -1,5 +1,8 @@
 import { ListItemTypes } from '@ui5/webcomponents-react/lib/ListItemTypes';
-import { withWebComponent, WithWebComponentPropTypes } from '@ui5/webcomponents-react/lib/withWebComponent';
+import {
+  withWebComponent,
+  WithWebComponentPropTypes,
+} from '@ui5/webcomponents-react/lib/withWebComponent';
 import '@ui5/webcomponents/dist/CustomListItem';
 import { FC, ReactNode } from 'react';
 
@@ -19,7 +22,7 @@ export interface CustomListItemPropTypes extends WithWebComponentPropTypes {
   /**
    * Fired when the user clicks on the detail button when type is <code>Detail</code>.
    */
-  onDetailClick?: (event: CustomEvent<{}>) => void;
+  onDetailClick?: (event: CustomEvent) => void;
 }
 
 /**
@@ -29,19 +32,15 @@ export interface CustomListItemPropTypes extends WithWebComponentPropTypes {
 
  * <a href="https://sap.github.io/ui5-webcomponents/playground/components/CustomListItem" target="_blank">UI5 Web Components Playground</a>
  */
-const CustomListItem: FC<CustomListItemPropTypes> = withWebComponent<CustomListItemPropTypes>(
-  'ui5-li-custom',
-  ['type'],
-  ['selected'],
-  [],
-  ['detail-click']
-);
+const CustomListItem: FC<CustomListItemPropTypes> = withWebComponent<
+  CustomListItemPropTypes
+>('ui5-li-custom', ['type'], ['selected'], [], ['detail-click']);
 
 CustomListItem.displayName = 'CustomListItem';
 
 CustomListItem.defaultProps = {
   type: ListItemTypes.Active,
-  selected: false
+  selected: false,
 };
 
 export { CustomListItem };

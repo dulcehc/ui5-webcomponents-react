@@ -1,9 +1,13 @@
 import { ValueState } from '@ui5/webcomponents-react/lib/ValueState';
-import { withWebComponent, WithWebComponentPropTypes } from '@ui5/webcomponents-react/lib/withWebComponent';
+import {
+  withWebComponent,
+  WithWebComponentPropTypes,
+} from '@ui5/webcomponents-react/lib/withWebComponent';
 import '@ui5/webcomponents/dist/CheckBox';
 import { FC } from 'react';
 
-export interface CheckBoxPropTypes extends Omit<WithWebComponentPropTypes, 'onChange'> {
+export interface CheckBoxPropTypes
+  extends Omit<WithWebComponentPropTypes, 'onChange'> {
   /**
    * Defines if the <code>CheckBox</code> is checked. <br><br> <b>Note:</b> The property can be changed with user interaction, either by cliking/tapping on the <code>CheckBox</code>, or by pressing the Enter or Space key.
    */
@@ -39,7 +43,7 @@ export interface CheckBoxPropTypes extends Omit<WithWebComponentPropTypes, 'onCh
   /**
    * Fired when the <code>CheckBox</code> checked state changes.
    */
-  onChange?: (event: CustomEvent<{}>) => void;
+  onChange?: (event: CustomEvent) => void;
 }
 
 /**
@@ -67,7 +71,7 @@ CheckBox.defaultProps = {
   disabled: false,
   readonly: false,
   valueState: ValueState.None,
-  wrap: false
+  wrap: false,
 };
 
 export { CheckBox };

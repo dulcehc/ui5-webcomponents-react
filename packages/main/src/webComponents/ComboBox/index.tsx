@@ -1,9 +1,13 @@
 import { ValueState } from '@ui5/webcomponents-react/lib/ValueState';
-import { withWebComponent, WithWebComponentPropTypes } from '@ui5/webcomponents-react/lib/withWebComponent';
+import {
+  withWebComponent,
+  WithWebComponentPropTypes,
+} from '@ui5/webcomponents-react/lib/withWebComponent';
 import '@ui5/webcomponents/dist/ComboBox';
 import { FC, ReactNode } from 'react';
 
-export interface ComboBoxPropTypes extends Omit<WithWebComponentPropTypes, 'onChange' | 'onInput'> {
+export interface ComboBoxPropTypes
+  extends Omit<WithWebComponentPropTypes, 'onChange' | 'onInput'> {
   /**
    * Defines whether <code>ComboBox</code> is in disabled state. <br><br> <b>Note:</b> A disabled <code>ComboBox</code> is completely uninteractive.
    */
@@ -47,13 +51,23 @@ export interface ComboBoxPropTypes extends Omit<WithWebComponentPropTypes, 'onCh
    */
   children?: ReactNode | ReactNode[];
   /**
+   * Defines the icon to be displayed in the input field.
+   */
+  icon?: ReactNode | ReactNode[];
+  /**
+   * Defines the value state message that will be displayed as pop up under the <code>ComboBox</code>. <br><br><br/><br/>
+   *
+   * <b>Note:</b> If not specified, a default text (in the respective language) will be displayed. <br> <b>Note:</b> The <code>valueStateMessage</code> would be displayed, when the <code>Select</code> is in <code>Information</code>, <code>Warning</code> or <code>Error</code> value state.
+   */
+  valueStateMessage?: ReactNode | ReactNode[];
+  /**
    * Fired when the input operation has finished by pressing Enter, focusout or an item is selected.
    */
-  onChange?: (event: CustomEvent<{}>) => void;
+  onChange?: (event: CustomEvent) => void;
   /**
    * Fired when typing in input. <br><br> <b>Note:</b> filterValue property is updated, input is changed.
    */
-  onInput?: (event: CustomEvent<{}>) => void;
+  onInput?: (event: CustomEvent) => void;
 }
 
 /**
@@ -67,7 +81,7 @@ const ComboBox: FC<ComboBoxPropTypes> = withWebComponent<ComboBoxPropTypes>(
   'ui5-combobox',
   ['filter', 'filterValue', 'placeholder', 'value', 'valueState'],
   ['disabled', 'loading', 'readonly', 'required'],
-  [],
+  ['icon', 'valueStateMessage'],
   ['change', 'input']
 );
 
@@ -79,7 +93,7 @@ ComboBox.defaultProps = {
   loading: false,
   readonly: false,
   required: false,
-  valueState: ValueState.None
+  valueState: ValueState.None,
 };
 
 export { ComboBox };

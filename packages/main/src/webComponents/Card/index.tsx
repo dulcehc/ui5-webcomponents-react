@@ -1,4 +1,7 @@
-import { withWebComponent, WithWebComponentPropTypes } from '@ui5/webcomponents-react/lib/withWebComponent';
+import {
+  withWebComponent,
+  WithWebComponentPropTypes,
+} from '@ui5/webcomponents-react/lib/withWebComponent';
 import '@ui5/webcomponents/dist/Card';
 import { FC, ReactNode } from 'react';
 
@@ -34,7 +37,7 @@ export interface CardPropTypes extends WithWebComponentPropTypes {
   /**
    * Fired when the <code>Card</code> header is activated by mouse/tap or by using the Enter or Space key. <br><br> <b>Note:</b> The event would be fired only if the <code>headerInteractive</code> property is set to true.
    */
-  onHeaderClick?: (event: CustomEvent<{}>) => void;
+  onHeaderClick?: (event: CustomEvent) => void;
 }
 
 /**
@@ -56,7 +59,7 @@ const Card: FC<CardPropTypes> = withWebComponent<CardPropTypes>(
 Card.displayName = 'Card';
 
 Card.defaultProps = {
-  headerInteractive: false
+  headerInteractive: false,
 };
 
 export { Card };

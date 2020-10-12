@@ -10,20 +10,21 @@ import React, { useRef } from 'react';
 const columns = [
   {
     Header: 'Name',
-    accessor: 'name' // String-based value accessors!
+    headerTooltip: 'Full Name', // A more extensive description!
+    accessor: 'name', // String-based value accessors!
   },
   {
     Header: 'Age',
-    accessor: 'age'
+    accessor: 'age',
   },
   {
     Header: 'Friend Name',
-    accessor: 'friend.name' // Custom value accessors!
+    accessor: 'friend.name', // Custom value accessors!
   },
   {
     Header: () => <span>Friend Age</span>, // Custom header components!
-    accessor: 'friend.age'
-  }
+    accessor: 'friend.age',
+  },
 ];
 
 const data = [
@@ -32,18 +33,18 @@ const data = [
     age: 40,
     friend: {
       name: 'MAR',
-      age: 28
+      age: 28,
     },
-    status: ValueState.Success
+    status: ValueState.Success,
   },
   {
     name: 'bla',
     age: 20,
     friend: {
       name: 'Nei',
-      age: 50
-    }
-  }
+      age: 50,
+    },
+  },
 ];
 
 const dataTree = [
@@ -52,7 +53,7 @@ const dataTree = [
     age: 40,
     friend: {
       name: 'MAR',
-      age: 28
+      age: 28,
     },
     subRows: [
       {
@@ -60,7 +61,7 @@ const dataTree = [
         age: 40,
         friend: {
           name: 'longlonglong',
-          age: 28
+          age: 28,
         },
         subRows: [
           {
@@ -68,7 +69,7 @@ const dataTree = [
             age: 40,
             friend: {
               name: 'DEF',
-              age: 28
+              age: 28,
             },
             subRows: [
               {
@@ -76,7 +77,7 @@ const dataTree = [
                 age: 40,
                 friend: {
                   name: 'mnop',
-                  age: 28
+                  age: 28,
                 },
                 subRows: [
                   {
@@ -84,7 +85,7 @@ const dataTree = [
                     age: 40,
                     friend: {
                       name: 'MAR',
-                      age: 28
+                      age: 28,
                     },
                     subRows: [
                       {
@@ -92,31 +93,31 @@ const dataTree = [
                         age: 40,
                         friend: {
                           name: 'MAR',
-                          age: 28
-                        }
-                      }
-                    ]
-                  }
-                ]
-              }
-            ]
-          }
-        ]
+                          age: 28,
+                        },
+                      },
+                    ],
+                  },
+                ],
+              },
+            ],
+          },
+        ],
       },
       {
         name: 'Fra',
         age: 40,
         friend: {
           name: 'MAR',
-          age: 28
-        }
+          age: 28,
+        },
       },
       {
         name: 'Fra',
         age: 40,
         friend: {
           name: 'MAR',
-          age: 28
+          age: 28,
         },
         subRows: [
           {
@@ -124,21 +125,21 @@ const dataTree = [
             age: 40,
             friend: {
               name: 'Retep',
-              age: 28
-            }
-          }
-        ]
-      }
-    ]
+              age: 28,
+            },
+          },
+        ],
+      },
+    ],
   },
   {
     name: 'bla',
     age: 20,
     friend: {
       name: 'Nei',
-      age: 50
-    }
-  }
+      age: 50,
+    },
+  },
 ];
 
 describe('AnalyticalTable', () => {
@@ -147,16 +148,22 @@ describe('AnalyticalTable', () => {
   });
 
   test('test Asc desc', async () => {
-    const { asFragment } = render(<AnalyticalTable data={data} title={'Test'} columns={columns} />);
+    const { asFragment } = render(
+      <AnalyticalTable data={data} title={'Test'} columns={columns} />
+    );
 
     expect(asFragment()).toMatchSnapshot();
 
-    fireEvent.click(screen.getAllByText('Sort Ascending')[0], { bubbles: false });
+    fireEvent.click(screen.getAllByText('Sort Ascending')[0], {
+      bubbles: false,
+    });
 
     expect(asFragment()).toMatchSnapshot();
 
     // test desc function inside the popover element
-    fireEvent.click(screen.getAllByText('Sort Descending')[0], { bubbles: false });
+    fireEvent.click(screen.getAllByText('Sort Descending')[0], {
+      bubbles: false,
+    });
 
     expect(asFragment()).toMatchSnapshot();
   });
@@ -189,7 +196,14 @@ describe('AnalyticalTable', () => {
 
   test('Loading - Placeholder', () => {
     const wrapper = mount(
-      <AnalyticalTable title="Table Title" data={[]} columns={columns} loading visibleRows={15} minRows={5} />
+      <AnalyticalTable
+        title="Table Title"
+        data={[]}
+        columns={columns}
+        loading
+        visibleRows={15}
+        minRows={5}
+      />
     );
 
     expect(wrapper.render()).toMatchSnapshot();
@@ -197,20 +211,41 @@ describe('AnalyticalTable', () => {
 
   test('Loading - Loader', () => {
     const wrapper = mount(
-      <AnalyticalTable title="Table Title" data={data} columns={columns} loading visibleRows={15} minRows={5} />
+      <AnalyticalTable
+        title="Table Title"
+        data={data}
+        columns={columns}
+        loading
+        visibleRows={15}
+        minRows={5}
+      />
     );
 
     expect(wrapper.render()).toMatchSnapshot();
   });
 
   test('Alternate Row Color', () => {
-    const wrapper = mount(<AnalyticalTable title="Table Title" data={data} columns={columns} alternateRowColor />);
+    const wrapper = mount(
+      <AnalyticalTable
+        title="Table Title"
+        data={data}
+        columns={columns}
+        alternateRowColor
+      />
+    );
 
     expect(wrapper.render()).toMatchSnapshot();
   });
 
   test('custom row height', () => {
-    const wrapper = mount(<AnalyticalTable title="Table Title" data={data} columns={columns} rowHeight={60} />);
+    const wrapper = mount(
+      <AnalyticalTable
+        title="Table Title"
+        data={data}
+        columns={columns}
+        rowHeight={60}
+      />
+    );
 
     expect(wrapper.render()).toMatchSnapshot();
   });
@@ -235,10 +270,14 @@ describe('AnalyticalTable', () => {
   });
 
   test('test drag and drop of a draggable column', () => {
-    const wrapper = mount(<AnalyticalTable data={data} title={'Test'} columns={columns} />);
+    const wrapper = mount(
+      <AnalyticalTable data={data} title={'Test'} columns={columns} />
+    );
 
     // get first column of the table and simulate dragging of it
-    let componentDrag = wrapper.find('div[role="columnheader"][draggable]').at(0);
+    let componentDrag = wrapper
+      .find('div[role="columnheader"][draggable]')
+      .at(0);
     let inst = componentDrag.instance();
     // @ts-ignore
     let dragColumnId = inst.dataset.columnId;
@@ -256,7 +295,9 @@ describe('AnalyticalTable', () => {
     dataTransfer.getData = () => {
       return dragColumnId;
     };
-    let componentDrop = wrapper.find('div[role="columnheader"][draggable]').at(1);
+    let componentDrop = wrapper
+      .find('div[role="columnheader"][draggable]')
+      .at(1);
     // @ts-ignore
     componentDrop.simulate('drop', { dataTransfer: dataTransfer });
 
@@ -265,7 +306,14 @@ describe('AnalyticalTable', () => {
 
   test('render without data', () => {
     const data = [];
-    const wrapper = mount(<AnalyticalTable title="Table Title" data={data} columns={columns} alternateRowColor />);
+    const wrapper = mount(
+      <AnalyticalTable
+        title="Table Title"
+        data={data}
+        columns={columns}
+        alternateRowColor
+      />
+    );
 
     expect(wrapper.render()).toMatchSnapshot();
   });
@@ -310,7 +358,9 @@ describe('AnalyticalTable', () => {
     expect(typeof tableRef.current.horizontalScrollToItem).toBe('function');
 
     // call functions
-    const tableBodyRef = tableRef.current.querySelector("div[class^='AnalyticalTable-tbody']");
+    const tableBodyRef = tableRef.current.querySelector(
+      "div[class^='AnalyticalTable-tbody']"
+    );
     const tableContainerRef = getByRole('grid', { hidden: true });
 
     act(() => {
@@ -362,10 +412,10 @@ describe('AnalyticalTable', () => {
         reactTableOptions={{
           getRowId: (row, relativeIndex, parent) => {
             return `${row.name ?? relativeIndex}`;
-          }
+          },
         }}
         selectedRowIds={{
-          ['Fra']: true
+          ['Fra']: true,
         }}
       />
     );

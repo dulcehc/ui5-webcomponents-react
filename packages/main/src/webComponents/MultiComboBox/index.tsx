@@ -1,9 +1,13 @@
 import { ValueState } from '@ui5/webcomponents-react/lib/ValueState';
-import { withWebComponent, WithWebComponentPropTypes } from '@ui5/webcomponents-react/lib/withWebComponent';
+import {
+  withWebComponent,
+  WithWebComponentPropTypes,
+} from '@ui5/webcomponents-react/lib/withWebComponent';
 import '@ui5/webcomponents/dist/MultiComboBox';
 import { FC, ReactNode } from 'react';
 
-export interface MultiComboBoxPropTypes extends Omit<WithWebComponentPropTypes, 'onChange' | 'onInput'> {
+export interface MultiComboBoxPropTypes
+  extends Omit<WithWebComponentPropTypes, 'onChange' | 'onInput'> {
   /**
    * Defines if the user input will be prevented, if no matching item has been found
    */
@@ -41,17 +45,27 @@ export interface MultiComboBoxPropTypes extends Omit<WithWebComponentPropTypes, 
    */
   children?: ReactNode | ReactNode[];
   /**
+   * Defines the icon to be displayed in the <code>MultiComboBox</code>.
+   */
+  icon?: ReactNode | ReactNode[];
+  /**
+   * Defines the value state message that will be displayed as pop up under the <code>ui5-multicombobox</code>. <br><br><br/><br/>
+   *
+   * <b>Note:</b> If not specified, a default text (in the respective language) will be displayed. <br> <b>Note:</b> The <code>valueStateMessage</code> would be displayed, when the <code>ui5-select</code> is in <code>Information</code>, <code>Warning</code> or <code>Error</code> value state.
+   */
+  valueStateMessage?: ReactNode | ReactNode[];
+  /**
    * Fired when the input operation has finished by pressing Enter or on focusout.
    */
-  onChange?: (event: CustomEvent<{}>) => void;
+  onChange?: (event: CustomEvent) => void;
   /**
    * Fired when the value of the <code>MultiComboBox</code> changes at each keystroke.
    */
-  onInput?: (event: CustomEvent<{}>) => void;
+  onInput?: (event: CustomEvent) => void;
   /**
    * Fired when the dropdown is opened or closed.
    */
-  onOpenChange?: (event: CustomEvent<{}>) => void;
+  onOpenChange?: (event: CustomEvent) => void;
   /**
    * Fired when selection is changed by user interaction in <code>SingleSelect</code> and <code>MultiSelect</code> modes.
    */
@@ -67,11 +81,13 @@ export interface MultiComboBoxPropTypes extends Omit<WithWebComponentPropTypes, 
 
  * <a href="https://sap.github.io/ui5-webcomponents/playground/components/MultiComboBox" target="_blank">UI5 Web Components Playground</a>
  */
-const MultiComboBox: FC<MultiComboBoxPropTypes> = withWebComponent<MultiComboBoxPropTypes>(
+const MultiComboBox: FC<MultiComboBoxPropTypes> = withWebComponent<
+  MultiComboBoxPropTypes
+>(
   'ui5-multi-combobox',
   ['placeholder', 'value', 'valueState'],
   ['allowCustomValues', 'disabled', 'open', 'readonly', 'required'],
-  [],
+  ['icon', 'valueStateMessage'],
   ['change', 'input', 'open-change', 'selection-change']
 );
 
@@ -83,7 +99,7 @@ MultiComboBox.defaultProps = {
   open: false,
   readonly: false,
   required: false,
-  valueState: ValueState.None
+  valueState: ValueState.None,
 };
 
 export { MultiComboBox };

@@ -1,7 +1,10 @@
 import { PlacementType } from '@ui5/webcomponents-react/lib/PlacementType';
 import { PopoverHorizontalAlign } from '@ui5/webcomponents-react/lib/PopoverHorizontalAlign';
 import { PopoverVerticalAlign } from '@ui5/webcomponents-react/lib/PopoverVerticalAlign';
-import { withWebComponent, WithWebComponentPropTypes } from '@ui5/webcomponents-react/lib/withWebComponent';
+import {
+  withWebComponent,
+  WithWebComponentPropTypes,
+} from '@ui5/webcomponents-react/lib/withWebComponent';
 import '@ui5/webcomponents/dist/Popover';
 import { FC, ReactNode } from 'react';
 
@@ -57,11 +60,11 @@ export interface PopoverPropTypes extends WithWebComponentPropTypes {
   /**
    * Fired after the component is closed. This event does not bubble.
    */
-  onAfterClose?: (event: CustomEvent<{}>) => void;
+  onAfterClose?: (event: CustomEvent) => void;
   /**
    * Fired after the component is opened. This event does not bubble.
    */
-  onAfterOpen?: (event: CustomEvent<{}>) => void;
+  onAfterOpen?: (event: CustomEvent) => void;
   /**
    * Fired before the component is closed. This event can be cancelled, which will prevent the popup from closing. This event does not bubble.
    */
@@ -69,7 +72,7 @@ export interface PopoverPropTypes extends WithWebComponentPropTypes {
   /**
    * Fired before the component is opened. This event can be cancelled, which will prevent the popup from opening. This event does not bubble.
    */
-  onBeforeOpen?: (event: CustomEvent<{}>) => void;
+  onBeforeOpen?: (event: CustomEvent) => void;
 }
 
 /**
@@ -81,7 +84,13 @@ export interface PopoverPropTypes extends WithWebComponentPropTypes {
  */
 const Popover: FC<PopoverPropTypes> = withWebComponent<PopoverPropTypes>(
   'ui5-popover',
-  ['headerText', 'horizontalAlign', 'placementType', 'verticalAlign', 'initialFocus'],
+  [
+    'headerText',
+    'horizontalAlign',
+    'placementType',
+    'verticalAlign',
+    'initialFocus',
+  ],
   ['allowTargetOverlap', 'modal', 'noArrow', 'preventFocusRestore'],
   ['footer', 'header'],
   ['after-close', 'after-open', 'before-close', 'before-open']
@@ -96,7 +105,7 @@ Popover.defaultProps = {
   noArrow: false,
   placementType: PlacementType.Right,
   verticalAlign: PopoverVerticalAlign.Center,
-  preventFocusRestore: false
+  preventFocusRestore: false,
 };
 
 export { Popover };

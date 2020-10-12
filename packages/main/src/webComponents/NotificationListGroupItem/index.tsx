@@ -1,9 +1,13 @@
 import '@ui5/webcomponents-fiori/dist/NotificationListGroupItem';
 import { Priority } from '@ui5/webcomponents-react/lib/Priority';
-import { withWebComponent, WithWebComponentPropTypes } from '@ui5/webcomponents-react/lib/withWebComponent';
+import {
+  withWebComponent,
+  WithWebComponentPropTypes,
+} from '@ui5/webcomponents-react/lib/withWebComponent';
 import { FC, ReactNode } from 'react';
 
-export interface NotificationListGroupItemPropTypes extends WithWebComponentPropTypes {
+export interface NotificationListGroupItemPropTypes
+  extends WithWebComponentPropTypes {
   /**
    * Defines if the group is collapsed or expanded.
    */
@@ -43,11 +47,11 @@ export interface NotificationListGroupItemPropTypes extends WithWebComponentProp
   /**
    * Fired when the <code>NotificationListGroupItem</code> is expanded/collapsed by user interaction.
    */
-  onToggle?: (event: CustomEvent<{}>) => void;
+  onToggle?: (event: CustomEvent) => void;
   /**
    * Fired when the <code>Close</code> button is pressed.
    */
-  onClose?: (event: CustomEvent<{}>) => void;
+  onClose?: (event: CustomEvent) => void;
 }
 
 /**
@@ -76,7 +80,7 @@ NotificationListGroupItem.defaultProps = {
   busy: false,
   priority: Priority.None,
   showClose: false,
-  selected: false
+  selected: false,
 };
 
 export { NotificationListGroupItem };

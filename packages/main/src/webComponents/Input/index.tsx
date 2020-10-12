@@ -1,10 +1,14 @@
 import { InputType } from '@ui5/webcomponents-react/lib/InputType';
 import { ValueState } from '@ui5/webcomponents-react/lib/ValueState';
-import { withWebComponent, WithWebComponentPropTypes } from '@ui5/webcomponents-react/lib/withWebComponent';
+import {
+  withWebComponent,
+  WithWebComponentPropTypes,
+} from '@ui5/webcomponents-react/lib/withWebComponent';
 import '@ui5/webcomponents/dist/Input';
 import { FC, ReactNode } from 'react';
 
-export interface InputPropTypes extends Omit<WithWebComponentPropTypes, 'onChange' | 'onInput' | 'onSubmit'> {
+export interface InputPropTypes
+  extends Omit<WithWebComponentPropTypes, 'onChange' | 'onInput' | 'onSubmit'> {
   /**
    * Defines whether the <code>Input</code> is in disabled state. <br><br> <b>Note:</b> A disabled <code>Input</code> is completely noninteractive.
    */
@@ -70,19 +74,21 @@ export interface InputPropTypes extends Omit<WithWebComponentPropTypes, 'onChang
   /**
    * Fired when the input operation has finished by pressing Enter or on focusout.
    */
-  onChange?: (event: CustomEvent<{}>) => void;
+  onChange?: (event: CustomEvent) => void;
   /**
    * Fired when the value of the <code>Input</code> changes at each keystroke, and when a suggestion item has been selected.
    */
-  onInput?: (event: CustomEvent<{}>) => void;
+  onInput?: (event: CustomEvent) => void;
   /**
    * Fired when user presses Enter key on the <code>Input</code>. <br><br> <b>Note:</b> The event is fired independent of whether there was a change before or not. If change was performed, the event is fired after the change event. The event is also fired when an item of the select list is selected by pressing Enter.
    */
-  onSubmit?: (event: CustomEvent<{}>) => void;
+  onSubmit?: (event: CustomEvent) => void;
   /**
    * Fired when the user navigates to a suggestion item via the ARROW keys, as a preview, before the final selection.
    */
-  onSuggestionItemPreview?: (event: CustomEvent<{ item: ReactNode; targetRef: ReactNode }>) => void;
+  onSuggestionItemPreview?: (
+    event: CustomEvent<{ item: ReactNode; targetRef: ReactNode }>
+  ) => void;
   /**
    * Fired when a suggestion item, that is displayed in the suggestion popup, is selected.
    */
@@ -90,15 +96,16 @@ export interface InputPropTypes extends Omit<WithWebComponentPropTypes, 'onChang
   /**
    * Fired when the user scrolls the suggestion popover.
    */
-  onSuggestionScroll?: (event: CustomEvent<{ scrollTop: number; scrollContainer: ReactNode }>) => void;
+  onSuggestionScroll?: (
+    event: CustomEvent<{ scrollTop: number; scrollContainer: ReactNode }>
+  ) => void;
 }
 
 /**
  * The <code>Input</code> component allows the user to enter and edit text or numeric values in one line. <br />
  Additionally, you can provide <code>suggestionItems</code>, that are displayed in a popover right under the input.
  <br /><br />
- The text field can be editable or read-only (<code>readonly</code> property), and it can be enabled or disabled (<code >enabled</code
- >
+ The text field can be editable or read-only (<code>readonly</code> property), and it can be enabled or disabled (<code>enabled</code>
  property). To visualize semantic states, such as "error" or "warning", the <code>valueState</code> property is provided.
  When the user makes changes to the text, the change event is fired, which enables you to react on any text change.
  <br /><br />
@@ -113,7 +120,14 @@ const Input: FC<InputPropTypes> = withWebComponent<InputPropTypes>(
   ['maxlength', 'name', 'placeholder', 'type', 'value', 'valueState'],
   ['disabled', 'highlight', 'readonly', 'required', 'showSuggestions'],
   ['icon', 'valueStateMessage'],
-  ['change', 'input', 'submit', 'suggestion-item-preview', 'suggestion-item-select', 'suggestion-scroll']
+  [
+    'change',
+    'input',
+    'submit',
+    'suggestion-item-preview',
+    'suggestion-item-select',
+    'suggestion-scroll',
+  ]
 );
 
 Input.displayName = 'Input';
@@ -125,7 +139,7 @@ Input.defaultProps = {
   required: false,
   showSuggestions: false,
   type: InputType.Text,
-  valueState: ValueState.None
+  valueState: ValueState.None,
 };
 
 export { Input };

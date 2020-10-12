@@ -1,10 +1,14 @@
 import { CalendarType } from '@ui5/webcomponents-react/lib/CalendarType';
 import { ValueState } from '@ui5/webcomponents-react/lib/ValueState';
-import { withWebComponent, WithWebComponentPropTypes } from '@ui5/webcomponents-react/lib/withWebComponent';
+import {
+  withWebComponent,
+  WithWebComponentPropTypes,
+} from '@ui5/webcomponents-react/lib/withWebComponent';
 import '@ui5/webcomponents/dist/DateTimePicker';
 import { FC, ReactNode } from 'react';
 
-export interface DateTimePickerPropTypes extends Omit<WithWebComponentPropTypes, 'onChange' | 'onInput'> {
+export interface DateTimePickerPropTypes
+  extends Omit<WithWebComponentPropTypes, 'onChange' | 'onInput'> {
   /**
    * Determines whether the <code>DatePicker</code> is displayed as disabled.
    */
@@ -50,6 +54,10 @@ export interface DateTimePickerPropTypes extends Omit<WithWebComponentPropTypes,
    */
   readonly?: boolean;
   /**
+   * Defines whether the <code>ui5-datepicker</code> is required.
+   */
+  required?: boolean;
+  /**
    * Defines a formatted date value.
    */
   value?: string;
@@ -66,11 +74,11 @@ export interface DateTimePickerPropTypes extends Omit<WithWebComponentPropTypes,
   /**
    * Fired when the input operation has finished by pressing Enter or on focusout.
    */
-  onChange?: (event: CustomEvent<{}>) => void;
+  onChange?: (event: CustomEvent) => void;
   /**
    * Fired when the value of the <code>DatePicker</code> is changed at each key stroke.
    */
-  onInput?: (event: CustomEvent<{}>) => void;
+  onInput?: (event: CustomEvent) => void;
 }
 
 /**
@@ -79,10 +87,21 @@ export interface DateTimePickerPropTypes extends Omit<WithWebComponentPropTypes,
 
  * <a href="https://sap.github.io/ui5-webcomponents/playground/components/DateTimePicker" target="_blank">UI5 Web Components Playground</a>
  */
-const DateTimePicker: FC<DateTimePickerPropTypes> = withWebComponent<DateTimePickerPropTypes>(
+const DateTimePicker: FC<DateTimePickerPropTypes> = withWebComponent<
+  DateTimePickerPropTypes
+>(
   'ui5-datetime-picker',
-  ['formatPattern', 'maxDate', 'minDate', 'name', 'placeholder', 'primaryCalendarType', 'value', 'valueState'],
-  ['disabled', 'hideWeekNumbers', 'readonly'],
+  [
+    'formatPattern',
+    'maxDate',
+    'minDate',
+    'name',
+    'placeholder',
+    'primaryCalendarType',
+    'value',
+    'valueState',
+  ],
+  ['disabled', 'hideWeekNumbers', 'readonly', 'required'],
   ['valueStateMessage'],
   ['change', 'input']
 );
@@ -95,7 +114,8 @@ DateTimePicker.defaultProps = {
   placeholder: undefined,
   primaryCalendarType: CalendarType.Gregorian,
   readonly: false,
-  valueState: ValueState.None
+  required: false,
+  valueState: ValueState.None,
 };
 
 export { DateTimePicker };

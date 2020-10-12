@@ -37,7 +37,7 @@ export const VirtualTableBody = (props: VirtualTableBodyProps) => {
     tableRef,
     visibleColumnsWidth,
     parentRef,
-    overscanCountHorizontal
+    overscanCountHorizontal,
   } = props;
 
   const itemCount = Math.max(minRows, rows.length);
@@ -47,8 +47,10 @@ export const VirtualTableBody = (props: VirtualTableBodyProps) => {
   const rowVirtualizer = useVirtual({
     size: itemCount,
     parentRef: consolidatedParentRef,
-    estimateSize: React.useCallback(() => internalRowHeight, [internalRowHeight]),
-    overscan
+    estimateSize: React.useCallback(() => internalRowHeight, [
+      internalRowHeight,
+    ]),
+    overscan,
   });
 
   const columnVirtualizer = useVirtual({
@@ -61,13 +63,13 @@ export const VirtualTableBody = (props: VirtualTableBodyProps) => {
       [visibleColumnsWidth]
     ),
     horizontal: true,
-    overscan: overscanCountHorizontal
+    overscan: overscanCountHorizontal,
   });
 
   reactWindowRef.current = {
     ...reactWindowRef.current,
     scrollToOffset: rowVirtualizer.scrollToOffset,
-    scrollToIndex: rowVirtualizer.scrollToIndex
+    scrollToIndex: rowVirtualizer.scrollToIndex,
   };
 
   const currentlyFocusedCell = useRef<HTMLDivElement>(null);
@@ -90,7 +92,8 @@ export const VirtualTableBody = (props: VirtualTableBodyProps) => {
       if (currentlyFocusedCell.current) {
         switch (e.key) {
           case 'ArrowRight': {
-            const newElement = currentlyFocusedCell.current.nextElementSibling as HTMLDivElement;
+            const newElement = currentlyFocusedCell.current
+              .nextElementSibling as HTMLDivElement;
             if (newElement) {
               currentlyFocusedCell.current.tabIndex = -1;
               newElement.tabIndex = 0;
@@ -100,7 +103,8 @@ export const VirtualTableBody = (props: VirtualTableBodyProps) => {
             break;
           }
           case 'ArrowLeft': {
-            const newElement = currentlyFocusedCell.current.previousElementSibling as HTMLDivElement;
+            const newElement = currentlyFocusedCell.current
+              .previousElementSibling as HTMLDivElement;
             if (newElement) {
               currentlyFocusedCell.current.tabIndex = -1;
               newElement.tabIndex = 0;
@@ -110,11 +114,16 @@ export const VirtualTableBody = (props: VirtualTableBodyProps) => {
             break;
           }
           case 'ArrowDown': {
-            const nextRow = currentlyFocusedCell.current.parentElement.nextElementSibling as HTMLDivElement;
+            const nextRow = currentlyFocusedCell.current.parentElement
+              .nextElementSibling as HTMLDivElement;
             if (nextRow) {
               currentlyFocusedCell.current.tabIndex = -1;
-              const currentColumnIndex = currentlyFocusedCell.current.getAttribute('aria-colindex');
-              const newElement: HTMLDivElement = nextRow.querySelector(`div[aria-colindex="${currentColumnIndex}"]`);
+              const currentColumnIndex = currentlyFocusedCell.current.getAttribute(
+                'aria-colindex'
+              );
+              const newElement: HTMLDivElement = nextRow.querySelector(
+                `div[aria-colindex="${currentColumnIndex}"]`
+              );
               newElement.tabIndex = 0;
               newElement.focus();
               currentlyFocusedCell.current = newElement;
@@ -122,10 +131,13 @@ export const VirtualTableBody = (props: VirtualTableBodyProps) => {
             break;
           }
           case 'ArrowUp': {
-            const previousRow = currentlyFocusedCell.current.parentElement.previousElementSibling as HTMLDivElement;
+            const previousRow = currentlyFocusedCell.current.parentElement
+              .previousElementSibling as HTMLDivElement;
             if (previousRow) {
               currentlyFocusedCell.current.tabIndex = -1;
-              const currentColumnIndex = currentlyFocusedCell.current.getAttribute('aria-colindex');
+              const currentColumnIndex = currentlyFocusedCell.current.getAttribute(
+                'aria-colindex'
+              );
               const newElement: HTMLDivElement = previousRow.querySelector(
                 `div[aria-colindex="${currentColumnIndex}"]`
               );
@@ -149,7 +161,7 @@ export const VirtualTableBody = (props: VirtualTableBodyProps) => {
       style={{
         position: 'relative',
         height: `${rowVirtualizer.totalSize}px`,
-        width: `${columnVirtualizer.totalSize}px`
+        width: `${columnVirtualizer.totalSize}px`,
       }}
     >
       {rowVirtualizer.virtualItems.map((virtualRow) => {
@@ -161,7 +173,7 @@ export const VirtualTableBody = (props: VirtualTableBodyProps) => {
               className={classes.tr}
               style={{
                 height: `${virtualRow.size}px`,
-                transform: `translateY(${virtualRow.start}px)`
+                transform: `translateY(${virtualRow.start}px)`,
               }}
             />
           );
@@ -174,11 +186,14 @@ export const VirtualTableBody = (props: VirtualTableBodyProps) => {
             style={{
               height: `${virtualRow.size}px`,
               transform: `translateY(${virtualRow.start}px)`,
-              position: 'absolute'
+              position: 'absolute',
             }}
           >
             {columnVirtualizer.virtualItems.map((virtualColumn) => {
               const cell = row.cells[virtualColumn.index];
+              if (!cell) {
+                return null;
+              }
               const cellProps = cell.getCellProps();
               if (row.original?.emptyRow) {
                 return <div {...cellProps} />;
@@ -210,7 +225,7 @@ export const VirtualTableBody = (props: VirtualTableBodyProps) => {
                     width: `${virtualColumn.size}px`,
                     transform: `translateX(${virtualColumn.start}px)`,
                     top: 0,
-                    left: 0
+                    left: 0,
                   }}
                 >
                   {cell.render(contentToRender)}

@@ -1,6 +1,9 @@
 import { ListMode } from '@ui5/webcomponents-react/lib/ListMode';
 import { ListSeparators } from '@ui5/webcomponents-react/lib/ListSeparators';
-import { withWebComponent, WithWebComponentPropTypes } from '@ui5/webcomponents-react/lib/withWebComponent';
+import {
+  withWebComponent,
+  WithWebComponentPropTypes,
+} from '@ui5/webcomponents-react/lib/withWebComponent';
 import '@ui5/webcomponents/dist/List';
 import { FC, ReactNode } from 'react';
 
@@ -64,18 +67,23 @@ export interface ListPropTypes extends WithWebComponentPropTypes {
   /**
    * Fired when the user scrolls to the bottom of the list. <br><br> <b>Note:</b> The event is fired when the <code>infiniteScroll</code> property is enabled.
    */
-  onLoadMore?: (event: CustomEvent<{}>) => void;
+  onLoadMore?: (event: CustomEvent) => void;
   /**
    * Fired when selection is changed by user interaction in <code>SingleSelect</code>, <code>SingleSelectBegin</code>, <code>SingleSelectEnd</code> and <code>MultiSelect</code> modes.
    */
-  onSelectionChange?: (event: CustomEvent<{ selectedItems: unknown[]; previouslySelectedItems: unknown[] }>) => void;
+  onSelectionChange?: (
+    event: CustomEvent<{
+      selectedItems: unknown[];
+      previouslySelectedItems: unknown[];
+    }>
+  ) => void;
 }
 
 /**
  * The <code>List</code> component allows displaying a list of items, advanced keyboard handling support for navigating
  between items, and predefined modes to improve the development efficiency. <br /><br />
  The <code>List</code> is а container for the available list items:
- <ul> <li><code>StandardListItem</code></li> <li><code>CustomListItem</code></li> <li><code>ui5-li-group-header</code></li>
+ <ul> <li><code>StandardListItem</code></li> <li><code>CustomListItem</code></li> <li><code>GroupHeaderListItem</code></li>
  </ul>
  <br /><br />
  To benefit from the built-in selection mechanism, you can use the available selection modes, such as
@@ -89,7 +97,14 @@ const List: FC<ListPropTypes> = withWebComponent<ListPropTypes>(
   ['footerText', 'headerText', 'mode', 'noDataText', 'separators'],
   ['busy', 'infiniteScroll', 'inset'],
   ['header'],
-  ['item-click', 'item-close', 'item-delete', 'item-toggle', 'load-more', 'selection-change']
+  [
+    'item-click',
+    'item-close',
+    'item-delete',
+    'item-toggle',
+    'load-more',
+    'selection-change',
+  ]
 );
 
 List.displayName = 'List';
@@ -99,7 +114,7 @@ List.defaultProps = {
   infiniteScroll: false,
   inset: false,
   mode: ListMode.None,
-  separators: ListSeparators.All
+  separators: ListSeparators.All,
 };
 
 export { List };

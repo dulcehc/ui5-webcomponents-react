@@ -1,6 +1,9 @@
 import { ListItemTypes } from '@ui5/webcomponents-react/lib/ListItemTypes';
 import { ValueState } from '@ui5/webcomponents-react/lib/ValueState';
-import { withWebComponent, WithWebComponentPropTypes } from '@ui5/webcomponents-react/lib/withWebComponent';
+import {
+  withWebComponent,
+  WithWebComponentPropTypes,
+} from '@ui5/webcomponents-react/lib/withWebComponent';
 import '@ui5/webcomponents/dist/StandardListItem';
 import { FC, ReactNode } from 'react';
 
@@ -44,7 +47,7 @@ export interface StandardListItemPropTypes extends WithWebComponentPropTypes {
   /**
    * Fired when the user clicks on the detail button when type is <code>Detail</code>.
    */
-  onDetailClick?: (event: CustomEvent<{}>) => void;
+  onDetailClick?: (event: CustomEvent) => void;
 }
 
 /**
@@ -53,7 +56,9 @@ export interface StandardListItemPropTypes extends WithWebComponentPropTypes {
 
  * <a href="https://sap.github.io/ui5-webcomponents/playground/components/StandardListItem" target="_blank">UI5 Web Components Playground</a>
  */
-const StandardListItem: FC<StandardListItemPropTypes> = withWebComponent<StandardListItemPropTypes>(
+const StandardListItem: FC<StandardListItemPropTypes> = withWebComponent<
+  StandardListItemPropTypes
+>(
   'ui5-li',
   ['description', 'icon', 'image', 'info', 'infoState', 'type'],
   ['iconEnd', 'selected'],
@@ -67,7 +72,7 @@ StandardListItem.defaultProps = {
   iconEnd: false,
   infoState: ValueState.None,
   type: ListItemTypes.Active,
-  selected: false
+  selected: false,
 };
 
 export { StandardListItem };

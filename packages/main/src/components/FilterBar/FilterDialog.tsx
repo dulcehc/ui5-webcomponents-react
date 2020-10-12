@@ -9,7 +9,7 @@ import {
   RESTORE,
   SAVE,
   SEARCH_FOR_FILTERS,
-  SHOW_ON_FILTER_BAR
+  SHOW_ON_FILTER_BAR,
 } from '@ui5/webcomponents-react/dist/assets/i18n/i18n-defaults';
 import { Bar } from '@ui5/webcomponents-react/lib/Bar';
 import { BarDesign } from '@ui5/webcomponents-react/lib/BarDesign';
@@ -26,7 +26,16 @@ import { Input } from '@ui5/webcomponents-react/lib/Input';
 import { Text } from '@ui5/webcomponents-react/lib/Text';
 import { Title } from '@ui5/webcomponents-react/lib/Title';
 import { TitleLevel } from '@ui5/webcomponents-react/lib/TitleLevel';
-import React, { Children, cloneElement, ReactElement, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, {
+  Children,
+  cloneElement,
+  ReactElement,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import { Ui5DialogDomRef } from '../../interfaces/Ui5DialogDomRef';
 import { stopPropagation } from '../../internal/stopPropagation';
 import styles from './FilterBarDialog.jss';
@@ -53,7 +62,7 @@ export const FilterDialog = (props) => {
     onGo,
     handleSelectionChange,
     handleDialogSearch,
-    handleDialogCancel
+    handleDialogCancel,
   } = props;
   const classes = useStyles();
   const [searchString, setSearchString] = useState('');
@@ -69,7 +78,7 @@ export const FilterDialog = (props) => {
     restoreText,
     saveText,
     searchForFiltersText,
-    showOnFilterBarText
+    showOnFilterBarText,
   ] = useI18nText(
     '@ui5/webcomponents-react',
     BASIC,
@@ -90,7 +99,9 @@ export const FilterDialog = (props) => {
   const handleSearch = useCallback(
     (e) => {
       if (handleDialogSearch) {
-        handleDialogSearch(enrichEventWithDetails(e, { value: e.target.value }));
+        handleDialogSearch(
+          enrichEventWithDetails(e, { value: e.target.value })
+        );
       }
       setSearchString(e.target.value);
     },
@@ -103,7 +114,14 @@ export const FilterDialog = (props) => {
       }
       handleDialogSave(e, dialogRefs.current, toggledFilters);
     },
-    [renderFBSearch, handleSearchValueChange, searchRef, handleDialogSave, toggledFilters, dialogRefs]
+    [
+      renderFBSearch,
+      handleSearchValueChange,
+      searchRef,
+      handleDialogSave,
+      toggledFilters,
+      dialogRefs,
+    ]
   );
 
   const handleClose = useCallback(
@@ -147,14 +165,21 @@ export const FilterDialog = (props) => {
 
   const footerContentRight = useMemo(
     () => (
-      <FlexBox justifyContent={FlexBoxJustifyContent.End} className={classes.footer}>
+      <FlexBox
+        justifyContent={FlexBoxJustifyContent.End}
+        className={classes.footer}
+      >
         {showGoButton && (
           <Button onClick={handleDialogGo} design={ButtonDesign.Emphasized}>
             Go
           </Button>
         )}
-        {showClearButton && <Button onClick={handleClearFilters}>{clearText}</Button>}
-        {showRestoreButton && <Button onClick={handleRestore}>{restoreText}</Button>}
+        {showClearButton && (
+          <Button onClick={handleClearFilters}>{clearText}</Button>
+        )}
+        {showRestoreButton && (
+          <Button onClick={handleRestore}>{restoreText}</Button>
+        )}
         <Button onClick={handleSave}>{saveText}</Button>
         <Button design={ButtonDesign.Transparent} onClick={handleCancel}>
           {cancelText}
@@ -170,7 +195,7 @@ export const FilterDialog = (props) => {
       showRestoreButton,
       handleRestore,
       handleSave,
-      handleCancel
+      handleCancel,
     ]
   );
 
@@ -180,10 +205,18 @@ export const FilterDialog = (props) => {
 
   const renderHeader = useCallback(
     () => (
-      <FlexBox direction={FlexBoxDirection.Column} alignItems={FlexBoxAlignItems.Center} className={classes.header}>
+      <FlexBox
+        direction={FlexBoxDirection.Column}
+        alignItems={FlexBoxAlignItems.Center}
+        className={classes.header}
+      >
         <Title level={TitleLevel.H4}>Filters</Title>
         {showSearch && (
-          <Input placeholder={searchForFiltersText} onInput={handleSearch} icon={<Icon name="search" />} />
+          <Input
+            placeholder={searchForFiltersText}
+            onInput={handleSearch}
+            icon={<Icon name="search" />}
+          />
         )}
       </FlexBox>
     ),
@@ -193,15 +226,16 @@ export const FilterDialog = (props) => {
   const renderChildren = useCallback(() => {
     return children
       .filter((item) => {
-        if (item.type.displayName !== 'FilterGroupItem') return true; //needed for deprecated FilterItem or custom elements
         return (
           !!item?.props &&
           item.props?.visible &&
-          (item.props?.label?.toLowerCase().includes(searchString.toLowerCase()) || searchString.length === 0)
+          (item.props?.label
+            ?.toLowerCase()
+            .includes(searchString.toLowerCase()) ||
+            searchString.length === 0)
         );
       })
       .map((child) => {
-        if (child.type.displayName !== 'FilterGroupItem') return child; //needed for deprecated FilterItem or custom elements
         const filterBarItemRef = filterBarRefs.current[child.key];
         let filterItemProps = {};
         if (filterBarItemRef) {
@@ -213,12 +247,12 @@ export const FilterDialog = (props) => {
             ...child.props.children,
             props: {
               ...child.props.children.props,
-              ...filterItemProps
+              ...filterItemProps,
             },
             ref: (node) => {
               dialogRefs.current[child.key] = node;
-            }
-          }
+            },
+          },
         });
       });
   }, [children, searchString, filterBarRefs]);
@@ -226,7 +260,9 @@ export const FilterDialog = (props) => {
   const handleCheckBoxChange = useCallback(
     (element) => (e) => {
       if (handleSelectionChange) {
-        handleSelectionChange(enrichEventWithDetails(e, { element, checked: e.target.checked }));
+        handleSelectionChange(
+          enrichEventWithDetails(e, { element, checked: e.target.checked })
+        );
       }
       setToggledFilters((old) => ({ ...old, [element.key]: e.target.checked }));
     },
@@ -250,20 +286,34 @@ export const FilterDialog = (props) => {
             <div className={classes.singleFilter} key={`${el.key}-container`}>
               {el}
               <CheckBox
-                checked={el.props.visibleInFilterBar || el.props.required || el.type.displayName !== 'FilterGroupItem'}
+                checked={
+                  el.props.visibleInFilterBar ||
+                  el.props.required ||
+                  el.type.displayName !== 'FilterGroupItem'
+                }
                 onChange={handleCheckBoxChange(el)}
-                disabled={el.props.required || el.type.displayName !== 'FilterGroupItem'}
+                disabled={
+                  el.props.required || el.type.displayName !== 'FilterGroupItem'
+                }
               />
             </div>
           );
         });
         return (
           <div className={classes.groupContainer} key={item}>
-            <FlexBox justifyContent={FlexBoxJustifyContent.SpaceBetween} alignItems={FlexBoxAlignItems.Center}>
-              <Title level={TitleLevel.H5} className={index === 0 ? classes.groupTitle : ''}>
+            <FlexBox
+              justifyContent={FlexBoxJustifyContent.SpaceBetween}
+              alignItems={FlexBoxAlignItems.Center}
+            >
+              <Title
+                level={TitleLevel.H5}
+                className={index === 0 ? classes.groupTitle : ''}
+              >
                 {item === 'default' ? basicText : item}
               </Title>
-              {index === 0 && <Text wrapping={false}>{showOnFilterBarText}</Text>}
+              {index === 0 && (
+                <Text wrapping={false}>{showOnFilterBarText}</Text>
+              )}
             </FlexBox>
             <div className={classes.filters}>{filters}</div>
           </div>
@@ -272,7 +322,12 @@ export const FilterDialog = (props) => {
   }, [renderChildren, toggledFilters, handleCheckBoxChange]);
 
   return createPortal(
-    <Dialog ref={dialogRef} header={renderHeader()} footer={renderFooter()} onAfterClose={handleClose}>
+    <Dialog
+      ref={dialogRef}
+      header={renderHeader()}
+      footer={renderFooter()}
+      onAfterClose={handleClose}
+    >
       <div className={classes.dialog}>
         {renderFBSearch && (
           <div className={classes.fbSearch} ref={searchRef}>
